@@ -1,0 +1,106 @@
+# ============================================================
+# Risk-Adaptive Voice Finance Assistant — Configuration
+# ============================================================
+
+project:
+  name: "Risk-Adaptive Voice-Based Financial Assistant"
+  version: "1.0.0"
+  seed: 42
+
+# --- Speech-to-Text (Whisper) ---
+stt:
+  model_name: "medium"         # Options: tiny, base, small, medium, large
+  language: "en"
+  device: "cpu"               # Change to "cuda" if GPU available
+  audio_sample_rate: 16000
+  max_audio_duration_sec: 30
+
+# --- Speaker Verification (ECAPA-TDNN) ---
+speaker_verification:
+  model_source: "speechbrain/spkrec-ecapa-voxceleb"
+  similarity_threshold: 0.45
+  min_enrollment_samples: 3
+  embedding_dim: 192
+  device: "cpu"
+  profiles_dir: "storage/speaker_profiles"
+
+# --- Intent Classification (LSTM) ---
+intent_classification:
+  intents:
+    - send_money
+    - check_balance
+    - transaction_history
+    - pay_bill
+  vocab_size: 2000
+  embedding_dim: 128
+  hidden_dim: 256
+  num_layers: 2
+  dropout: 0.3
+  max_seq_length: 50
+  batch_size: 32
+  epochs: 50
+  learning_rate: 0.001
+  model_path: "ml/models/intent_model.pth"
+  vocab_path: "ml/models/vocab.json"
+  dataset_path: "ml/data/intent_dataset.csv"
+  num_samples: 2000
+
+# --- Fraud Detection (IsolationForest + RandomForest) ---
+fraud_detection:
+  isolation_forest:
+    n_estimators: 100
+    contamination: 0.1
+    random_state: 42
+  random_forest:
+    n_estimators: 200
+    max_depth: 10
+    random_state: 42
+  risk_thresholds:
+    low_max: 0.3
+    medium_max: 0.7
+    # above 0.7 = High
+  model_path: "ml/models/fraud_model.joblib"
+  scaler_path: "ml/models/fraud_scaler.joblib"
+  dataset_path: "ml/data/fraud_dataset.csv"
+  num_samples: 10000
+
+# --- Auth Logic ---
+auth:
+  risk_tiers:
+    low:
+      auth_method: "pin_only"
+      description: "Standard PIN verification"
+    medium:
+      auth_method: "step_up"
+      description: "PIN + voice re-confirmation"
+    high:
+      auth_method: "block"
+      description: "Transaction blocked, alert sent"
+  pin_hash_rounds: 12
+
+# --- Razorpay ---
+razorpay:
+  key_id: "RAZORPAY_KEY_ID"        # Replace with actual key or use env var
+  key_secret: "RAZORPAY_KEY_SECRET"  # Replace with actual secret or use env var
+  currency: "INR"
+  payment_capture: 1                 # Auto-capture payments
+  max_amount_paise: 100000           # ₹1000 max for safety (in paise)
+  test_mode: true
+
+# --- Database ---
+database:
+  url: "sqlite:///storage/voice_finance.db"
+  echo: false
+
+# --- Storage ---
+storage:
+  audio_dir: "storage/audio"
+  speaker_profiles_dir: "storage/speaker_profiles"
+  logs_dir: "storage/logs"
+
+# --- API ---
+api:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins:
+    - "*"

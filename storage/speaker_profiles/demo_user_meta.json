@@ -1,0 +1,10 @@
+{
+  "speaker_id": "demo_user",
+  "num_enrollment_samples": 3,
+  "embedding_dim": 192,
+  "audio_files": [
+    "storage/audio/enrollment_demo_user\\enroll_0.wav",
+    "storage/audio/enrollment_demo_user\\enroll_1.wav",
+    "storage/audio/enrollment_demo_user\\enroll_2.wav"
+  ]
+}

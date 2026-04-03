@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ML Models (large files)
+ml/models/sv_pretrained/
+
+# Database
+storage/voice_finance.db
+
+# Audio files (uploaded)
+storage/audio/*.wav
+storage/audio/enrollment_*/
+
+# Logs
+storage/logs/*.log
+
+# OS
+.DS_Store
+Thumbs.db

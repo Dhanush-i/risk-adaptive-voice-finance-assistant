@@ -1,0 +1,45 @@
+# ============================================================
+# Risk-Adaptive Voice Finance Assistant — Dependencies
+# ============================================================
+
+# --- Core ---
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+python-multipart==0.0.9
+pydantic==2.9.0
+pyyaml==6.0.2
+
+# --- ML: Speech-to-Text ---
+openai-whisper
+# torch is installed via whisper dependency
+
+# --- ML: Speaker Verification ---
+speechbrain==1.0.0
+torch==2.2.2
+torchaudio==2.2.2
+
+# --- ML: Intent Classification ---
+# torch already installed
+numpy==1.26.4
+
+# --- ML: Fraud Detection ---
+scikit-learn==1.5.1
+pandas==2.2.2
+joblib==1.4.2
+
+# --- Payments ---
+razorpay==1.4.2
+
+# --- Database ---
+sqlalchemy==2.0.32
+aiosqlite==0.20.0
+
+# --- Auth ---
+bcrypt==4.2.0
+
+# --- Utilities ---
+python-dotenv==1.0.1
+librosa==0.10.2
+soundfile==0.12.1
+matplotlib==3.9.2
+seaborn==0.13.2

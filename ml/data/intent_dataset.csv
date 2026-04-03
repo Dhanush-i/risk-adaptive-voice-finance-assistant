@@ -1,0 +1,2001 @@
+text,intent
+please pay mobile bill 10,pay_bill
+show last 15 transactions,transaction_history
+transfer 400 rs to seema,send_money
+display account balance,check_balance
+i want to pay my mobile bill,pay_bill
+show me recent activity,transaction_history
+pay internet charges,pay_bill
+what's left in my account,check_balance
+available balance please,check_balance
+pay 1 for dth,pay_bill
+display recent transactions,transaction_history
+what's left in my account,check_balance
+send 10 okay to bhavna,send_money
+transfer 200 rs to pooja,send_money
+pay 400 for my credit card bill,pay_bill
+can you pay my credit card bill,pay_bill
+history of my payments,transaction_history
+i want to know my balance,check_balance
+send isha 75 rupees,send_money
+sand 75 rupees to anu,send_money
+previous transactions okay,transaction_history
+make dth payment of 2000,pay_bill
+settle dth dues of 2,pay_bill
+settle gas dues of 500,pay_bill
+please tell me my balance,check_balance
+move 75 to mohit's account,send_money
+please send 25 rupee's to swati,send_money
+i want to pay ashok 200,send_money
+show my recent payments,transaction_history
+i want to pay my dth bill,pay_bill
+make insurance bill payment,pay_bill
+please pay dth bill 50,pay_bill
+could send 250 to nisha,send_money
+pay for my credit card,pay_bill
+i want to pay deepa 75,send_money
+recent transaction history,transaction_history
+how much balance do i have,check_balance
+make payment for electricity 400 rupees,pay_bill
+how much money is left,check_balance
+show all recent transactions,transaction_history
+make electricity bill payment,pay_bill
+i'd like to transfer 400 to ravi,send_money
+previous transactions,transaction_history
+can you show my transaction history,transaction_history
+i need to send 300 rupees to sanjay,send_money
+settle gas bill of 20,pay_bill
+process payment of 2 to sunita,send_money
+quickly send 150 to ravi,send_money
+transfer 150 to mohit,send_money
+pay 5 rupees for phone bill,pay_bill
+please pay 500 rupees to ashok,send_money
+mera balance batao,check_balance
+pay water charges,pay_bill
+i need to send 500 rupees to pankaj,send_money
+can you pay my mobile bill,pay_bill
+internet payment 500 please,pay_bill
+remaining balance,check_balance
+can you pay my phone bill,pay_bill
+pay gas bill,pay_bill
+sent 2 to ram,send_money
+my transactions,transaction_history
+electricity well recharge 100,pay_bill
+i want to pay mobile bill of 100,pay_bill
+pay 5 to geeta,send_money
+process payment of 300 to deepa,send_money
+send 2 rs to suresh,send_money
+please pay electricity bill 2,pay_bill
+what's my account balance,check_balance
+what do i have in my account,check_balance
+send 100 to anil please,send_money
+give 20 rupees to harish,send_money
+forward 1 to deepa,send_money
+make dth payment of 100,pay_bill
+check balance please,check_balance
+okay just send 10 to mohit,send_money
+history of my payments,transaction_history
+i want to check my balance,check_balance
+what is my balance,check_balance
+send 75 to swati please,send_money
+send 10 rs to bhavna,send_money
+settle my gas bill,pay_bill
+can you show my transaction history,transaction_history
+can you check my balance,check_balance
+how much money do i have,check_balance
+what transactions did i make,transaction_history
+what have i paid recently,transaction_history
+show me recent activity,transaction_history
+pay my insurance dues,pay_bill
+pay my phone bill,pay_bill
+what do i have in my account,check_balance
+payment of 10 to sita please,send_money
+do transfer 10 to anu,send_money
+make electricity payment of 75,pay_bill
+phone bill of 1 rupees,pay_bill
+transfer 2 to rajesh,send_money
+i want to pay swati 20,send_money
+pay 1500 rupees for credit card bill,pay_bill
+show transactions,transaction_history
+i want to pay kavya 2000,send_money
+pay my gas bill,pay_bill
+make insurance bill payment,pay_bill
+display last 3 transactions,transaction_history
+transfer 25 rupees to arun's account,send_money
+sent 150 to sita,send_money
+send 2000 inr to vijay,send_money
+available balance please,check_balance
+balance kitna hai,check_balance
+check account balance,check_balance
+what do i have in my account,check_balance
+internet bill pay 250,pay_bill
+pay amit an amount of 2000 rupees,send_money
+basically view my transactions,transaction_history
+pay mobile bill of 200 rupees,pay_bill
+pay 1000 for phone,pay_bill
+pay gas charges,pay_bill
+show account balance,check_balance
+history of my payments,transaction_history
+balance check,check_balance
+send ganesh 150,send_money
+move 2000 to ananya's account,send_money
+send karthik 1000 rupees,send_money
+tell me the balance,check_balance
+can you pay my insurance bill,pay_bill
+water bill payment of 75 rupees,pay_bill
+transaction list,transaction_history
+recent transaction history,transaction_history
+payment of 750 to vikram please,send_money
+mobile payment 5 please,pay_bill
+pay my insurance dues,pay_bill
+pay my internet bill,pay_bill
+show last 7 transactions,transaction_history
+process payment of 1000 to kumar,send_money
+display account balance,check_balance
+what is my current account balance like,check_balance
+i want to pay seema 15,send_money
+dth bill payment of 1500 rupees,pay_bill
+show my recent payments,transaction_history
+tell me my balance,check_balance
+what have i paid recently,transaction_history
+pay phone charges,pay_bill
+please do a transfer of 5 to vikram,send_money
+account balance please,check_balance
+recent activity please,transaction_history
+show recent activity,transaction_history
+show transaction history,transaction_history
+display last 20 transactions,transaction_history
+settle my mobile bill,pay_bill
+last transactions,transaction_history
+settle internet dues of 2000,pay_bill
+what were my last transactions,transaction_history
+show me what i spent recently,transaction_history
+forward 1000 to pankaj,send_money
+pay mobile recharge of 1000,pay_bill
+please transfer 2 rs to manish,send_money
+how much money is left,check_balance
+clear my insurance bill of 1,pay_bill
+how much is in my account,check_balance
+can you check my balance,check_balance
+show my recent payments,transaction_history
+last transactions,transaction_history
+send 1500 inr to bhavna,send_money
+dth bill payment of 750 rupees,pay_bill
+send 1 to sita please,send_money
+show me my balance,check_balance
+total balance,check_balance
+last few transactions,transaction_history
+please send 1 rupees to sachin,send_money
+what is the balance in my account,check_balance
+my recent activity,transaction_history
+my recent activity,transaction_history
+pay 250 for credit card,pay_bill
+forward 25 to vivek,send_money
+how much money is in account,check_balance
+last transactions,transaction_history
+recent activity please,transaction_history
+recent transaction history,transaction_history
+pay credit card recharge of 1,pay_bill
+tell actually me the balance,check_balance
+my recent activity,transaction_history
+display recent transactions,transaction_history
+tell me my balance,check_balance
+settle electricity bill of 25,pay_bill
+make payment for credit card 2 rupees,pay_bill
+can you please send 1 rs to nisha,send_money
+pay 1500 for my broadband bill,pay_bill
+pay ravi an amount of 400 rupees,send_money
+transfer 15 rupees suresh,send_money
+move 2 to ganesh's account,send_money
+pay my mobile dues,pay_bill
+i want to see payment history,transaction_history
+what's my current balance,check_balance
+how much money is left,check_balance
+payment of 250 to pooja please,send_money
+please pay my water bill of 20,pay_bill
+my recent activity,transaction_history
+make water bill payment,pay_bill
+display my transactions,transaction_history
+pay gas bill,pay_bill
+basically what is my balance,check_balance
+show last 20 transactions,transaction_history
+mera balance batao,check_balance
+what is my balance,check_balance
+clear dth bill,pay_bill
+my recent activity,transaction_history
+pay 400 rupees for gas bill,pay_bill
+transfer 5 rupees rahul,send_money
+dth bill payment of 2000 rupees,pay_bill
+i want to send 20 to seema,send_money
+i want to see my transactions,transaction_history
+my balance,check_balance
+pay credit card bill,pay_bill
+pay my like electricity dues,pay_bill
+internet bill pay 500,pay_bill
+pay the gas bill,pay_bill
+mobile recharge 20,pay_bill
+my recent activity,transaction_history
+i need to check my balance,check_balance
+my current balance,check_balance
+show last 7 transactions,transaction_history
+display my balance,check_balance
+pay 1 for my water bill,pay_bill
+send some money to kumar 200 rupees,send_money
+so what's my current balance,check_balance
+recent transaction history,transaction_history
+phone bill of 1500 rupees,pay_bill
+what is the balance in my account,check_balance
+i need to pay insurance bill,pay_bill
+make internet bill payment,pay_bill
+show me my balance,check_balance
+sent 400 to amit,send_money
+settle mobile dues of 500,pay_bill
+show last 20 transactions,transaction_history
+what is the balance in my account,check_balance
+show my recent transactions,transaction_history
+display my balance,check_balance
+past 3 transactions please,transaction_history
+whats my balance,check_balance
+phone bill of 25 rupees,pay_bill
+send 50 rs to sita,send_money
+what's my current balance,check_balance
+give 20 rupees to harish,send_money
+please tell me my balance,check_balance
+please pay my dth bill of 2,pay_bill
+what do i have in my account,check_balance
+how much balance do i have,check_balance
+settle credit card dues of 2,pay_bill
+please transfer 75 rs to pooja,send_money
+remaining balance,check_balance
+can pay my dth bill,pay_bill
+could you send 5 to suresh,send_money
+i need to pay water bill,pay_bill
+show my last 10 payments,transaction_history
+recharge water for 750,pay_bill
+show my last 20 payments,transaction_history
+transaction list,transaction_history
+display account balance,check_balance
+display okay my balance,check_balance
+view my actually transactions,transaction_history
+pay broadband recharge of 1000,pay_bill
+send 1500 inr to anu,send_money
+quickly send 25 to geeta,send_money
+just send 2000 to ashok,send_money
+last few transactions,transaction_history
+display account balance,check_balance
+transfer money to ashok amount 2,send_money
+history of my payments actually,transaction_history
+show me my balance,check_balance
+uh internet payment 25,pay_bill
+check balance please,check_balance
+recent activity please,transaction_history
+what's left in my account,check_balance
+process payment of 250 to vijay,send_money
+could you send 75 to mohit,send_money
+send 5 to lakshmi please,send_money
+sand 75 rupees to isha,send_money
+my transactions,transaction_history
+list recent payments,transaction_history
+pay credit card bill of 150 rupees,pay_bill
+make payment for phone 75 rupees,pay_bill
+send 300 rs to rohan,send_money
+current balance check,check_balance
+current balance check,check_balance
+pay 250 for insurance,pay_bill
+account balance please,check_balance
+sent 300 to kavya,send_money
+list my transactions,transaction_history
+remaining balance,check_balance
+what is the balance in my account,check_balance
+sand 1500 rupees to sneha,send_money
+do transfer 1 to lakshmi,send_money
+send isha 25,send_money
+what transactions did i make,transaction_history
+what do i have in my account,check_balance
+tell me my balance,check_balance
+what did i pay recently,transaction_history
+current balance check,check_balance
+previous transactions,transaction_history
+current balance check,check_balance
+payment of 50 to rohan please,send_money
+i want to pay my water bill,pay_bill
+view my transactions,transaction_history
+show my last 15 payments,transaction_history
+show recent activity,transaction_history
+balance check,check_balance
+pay phone charges,pay_bill
+show my last 5 payments,transaction_history
+show me how much money i have,check_balance
+i want to check my balance,check_balance
+pay 25 rs for my broadband,pay_bill
+please pay my insurance bill of 10,pay_bill
+my transactions,transaction_history
+show me my payment history,transaction_history
+i want to see payment history,transaction_history
+i want to know my balance,check_balance
+pay my phone dues,pay_bill
+what's my remaining balance,check_balance
+list my transactions,transaction_history
+internet payment 400 please,pay_bill
+remaining balance,check_balance
+send some money to sachin 750 rupees,send_money
+can you pay my insurance bill,pay_bill
+please transfer 1000 rs to vivek,send_money
+what payments did i make,transaction_history
+whats my balance,check_balance
+isha ko 2 rupees bhejo,send_money
+last transactions,transaction_history
+current balance check,check_balance
+could you send 75 to sita,send_money
+what's my account balance,check_balance
+what is my current account balance,check_balance
+send anil 100 rupees,send_money
+payment of 1500 to vikram please,send_money
+could you send 1500 to pooja,send_money
+i want to see payment history,transaction_history
+i want to see my transactions,transaction_history
+i want to pay deepa 15,send_money
+send some money to arjun 2000 rupees,send_money
+can you show my balance,check_balance
+credit card bill pay 50,pay_bill
+recharge gas for 20,pay_bill
+pay for my gas,pay_bill
+available balance please,check_balance
+i want to see my transactions,transaction_history
+past 15 transactions please,transaction_history
+show recent activity,transaction_history
+please pay internet bill 15,pay_bill
+i want to see my transactions,transaction_history
+payment history,transaction_history
+how much money is left,check_balance
+process payment of 200 to rohan,send_money
+wire 25 to vijay,send_money
+settle phone bill of 250,pay_bill
+i'd like to transfer 1000 to vijay,send_money
+please pay 500 rupees to meera,send_money
+just send 100 like to deepa,send_money
+make a payment of 100 to amit,send_money
+what do i have in my account,check_balance
+check balance please,check_balance
+pay mobile charges,pay_bill
+pay 150 rupees for electricity bill,pay_bill
+i want to pay dth bill,pay_bill
+gas recharge basically 10,pay_bill
+pay gas 500 rupees,pay_bill
+check account balance,check_balance
+what is my current account balance,check_balance
+transfer 250 rs to nisha,send_money
+how much balance do i have,check_balance
+i need to pay gas bill,pay_bill
+i want to pay water bill of 150,pay_bill
+previous transactions,transaction_history
+check account balance basically,check_balance
+show my account balance,check_balance
+sand 750 rupees to manish,send_money
+can you please send 300 rs to nisha,send_money
+pay my phone dues,pay_bill
+whats my balance,check_balance
+payment of 100 to sita please,send_money
+pay 750 for credit card,pay_bill
+show previous payments,transaction_history
+show last 15 transactions,transaction_history
+what is actually current account balance,check_balance
+previous transactions,transaction_history
+sand 5 rupees to dhanush,send_money
+sent 2000 to meera,send_money
+show recent activity,transaction_history
+can you show my transaction history,transaction_history
+balance please,check_balance
+clear phone bill,pay_bill
+pay phone charges,pay_bill
+i want to pay sachin 200,send_money
+pay the broadband bill,pay_bill
+previous transactions,transaction_history
+just send 150 to amit,send_money
+what's my remaining balance,check_balance
+what's my account balance,check_balance
+available balance please,check_balance
+i need to send 75 rupees to ananya,send_money
+recent activity please,transaction_history
+please pay my credit card bill of 250,pay_bill
+show past transactions,transaction_history
+show me recent activity,transaction_history
+recent like activity please,transaction_history
+account balance please,check_balance
+process payment of 750 to danish,send_money
+last few transactions,transaction_history
+can you pay my internet bill,pay_bill
+recent payments,transaction_history
+pay mobile bill of 250 rupees,pay_bill
+balance kitna hai,check_balance
+available balance please,check_balance
+show my last 10 payments,transaction_history
+pay suresh an amount of 300 rupees,send_money
+pay neha an amount of 300 rupees,send_money
+mobile payment 20 please,pay_bill
+current balance check,check_balance
+forward 15 to arun,send_money
+send 50 inr to danish,send_money
+can you transfer 1 rupees to nisha,send_money
+can you please send 15 rs to sita,send_money
+do transfer 1000 to harish,send_money
+recent activity please,transaction_history
+send rohan 15,send_money
+check account balance,check_balance
+settle broadband dues of 10,pay_bill
+pay broadband charges,pay_bill
+what did i pay recently,transaction_history
+balance please,check_balance
+transfer 500 to sneha,send_money
+transfer 750 rupees to harish's account,send_money
+wire 75 to manish,send_money
+what are my recent transactions,transaction_history
+pay electricity charges,pay_bill
+make payment for electricity 150 rupees,pay_bill
+my current balance,check_balance
+please settle phone bill,pay_bill
+settle my broadband bill,pay_bill
+please do a transfer of 750 to anil,send_money
+what did i pay recently,transaction_history
+display account balance,check_balance
+could you send 15 to neha,send_money
+how much is in my account,check_balance
+last transactions,transaction_history
+display recent transactions um,transaction_history
+i want to see payment history,transaction_history
+how much money do i have,check_balance
+pay mobile 5 rupees,pay_bill
+what have i paid recently,transaction_history
+what were my last transactions,transaction_history
+please send 100 rupees to lakshmi,send_money
+pay insurance bill,pay_bill
+transfer 5 rupes to vijay,send_money
+process payment of 200 to manish,send_money
+display my transactions,transaction_history
+recharge internet for 10,pay_bill
+clear phone bill,pay_bill
+tell me my balance,check_balance
+display last 10 transactions,transaction_history
+show me recent activity,transaction_history
+my transactions,transaction_history
+please send 15 rupees to rajesh,send_money
+show my recent transactions,transaction_history
+transaction list,transaction_history
+pay phone recharge of 25,pay_bill
+current balance check,check_balance
+clear water bill,pay_bill
+please pay my dth bill of 750,pay_bill
+make payment 250 rupees to priya,send_money
+what is my current account balance,check_balance
+process phone payment,pay_bill
+previous transactions,transaction_history
+total balance,check_balance
+show my last 10 payments,transaction_history
+give me my transaction details,transaction_history
+display recent transactions,transaction_history
+make payment for electricity 300 rupees,pay_bill
+what did i pay recently,transaction_history
+pay 300 for my dth bill,pay_bill
+what is the available balance,check_balance
+what is the balance in my account,check_balance
+settle actually my gas bill,pay_bill
+make internet payment of 1,pay_bill
+send some money to mohit 20 rupees,send_money
+check account balance,check_balance
+please transfer 750 rs to sachin,send_money
+mera balance batao,check_balance
+give 100 rupees to arun,send_money
+please tell me my balance,check_balance
+i want to pay my phone bill,pay_bill
+show me what i spent recently,transaction_history
+my current balance,check_balance
+show transaction history,transaction_history
+pay 300 rs for my water,pay_bill
+could you send 20 to rahul,send_money
+how much is in my account,check_balance
+what is my current account balance,check_balance
+tell me the balance,check_balance
+show me uh my balance,check_balance
+kindly basically transfer 10 to karthik,send_money
+my transactions,transaction_history
+what payments did i make,transaction_history
+pay 10 for my credit card bill,pay_bill
+transfer 400 rupees danish,send_money
+recent payments,transaction_history
+show okay my previous transactions,transaction_history
+how much money is left,check_balance
+check my balance,check_balance
+please send 15 rupees to vikram,send_money
+show my recent payments,transaction_history
+basically clear my insurance bill of 50,pay_bill
+i need to check my balance,check_balance
+pay 15 for my dth bill,pay_bill
+please send 20 rupee's to deepa,send_money
+recharge gas for 100,pay_bill
+transfer 1000 rupes to deepa,send_money
+payment history okay,transaction_history
+electricity bill pay 500,pay_bill
+tell me my balance,check_balance
+remaining balance,check_balance
+my current balance,check_balance
+check balance please,check_balance
+sand 25 rupees to pankaj,send_money
+payment history,transaction_history
+i need to pay credit card bill,pay_bill
+pay phone recharge of 5,pay_bill
+make payment 15 rupees to sita,send_money
+settle dth dues of 250,pay_bill
+recharge mobile for 25,pay_bill
+pay ganesh 25 rupees,send_money
+what is my current account balance,check_balance
+what did i pay recently,transaction_history
+how much money is left,check_balance
+phone payment 300 please,pay_bill
+dth bill pay 2,pay_bill
+please send 2 rupees to ram,send_money
+my recent activity,transaction_history
+how much balance do i have,check_balance
+process phone payment,pay_bill
+clear electricity bill,pay_bill
+please tell me my balance,check_balance
+sand 2000 rupees to ganesh,send_money
+please pay 2000 rupees to varun,send_money
+i want to see payment history,transaction_history
+broadband bill of 15 rupees,pay_bill
+could you send 10 to pooja,send_money
+pay amit an amount of 1 rupees,send_money
+balance kitna hai,check_balance
+my transactions,transaction_history
+can you transfer 1000 rupees to isha,send_money
+send 500 rs to ravi,send_money
+what have i paid recently,transaction_history
+pay my gas dues,pay_bill
+last transactions,transaction_history
+pay electricity bill,pay_bill
+what is the balance in my account,check_balance
+payment of 1 to suresh please,send_money
+show account balance,check_balance
+tell me the balance,check_balance
+send 5 rs to vijay,send_money
+show me how much money i have,check_balance
+move 1 to amit's account,send_money
+pay danish 50 rupees,send_money
+my payment history please,transaction_history
+show previous transactions,transaction_history
+settle dth bill of 15,pay_bill
+show me my payment history,transaction_history
+what were my last transactions,transaction_history
+can you pay my insurance bill,pay_bill
+pay anil 5 rupees,send_money
+balance check,check_balance
+send 15 rupee to bhavna,send_money
+could you send 75 to vijay,send_money
+recent activity please,transaction_history
+pay the dth bill,pay_bill
+transfer 400 rupees varun,send_money
+account balance please,check_balance
+i want to pay vijay 750,send_money
+process payment of 100 to kumar,send_money
+send 750 to sunita please,send_money
+what's my account balance,check_balance
+what have i paid recently,transaction_history
+what's my remaining balance,check_balance
+transfer 75 rupees danish,send_money
+pay geeta an amount of 25 rupees,send_money
+last transactions,transaction_history
+i want to check my balance,check_balance
+show past transactions,transaction_history
+remaining balance,check_balance
+recent activity please,transaction_history
+available balance please,check_balance
+transfer money to pooja actually amount 10,send_money
+show my account balance,check_balance
+transaction history,transaction_history
+what is the available balance,check_balance
+make a payment of 400 to harish,send_money
+can you show my balance,check_balance
+clear credit card bill,pay_bill
+transaction list,transaction_history
+how much money is left,check_balance
+pay 1 for my internet bill,pay_bill
+settle mobile dues of 1000,pay_bill
+pay electricity charges,pay_bill
+i want to check my balance,check_balance
+i'd like to transfer 1000 to rohan,send_money
+sand 75 rupees to kumar,send_money
+actually can you show my balance,check_balance
+pay the credit card bill,pay_bill
+display my balance,check_balance
+what do i have in my account,check_balance
+please pay my phone bill of 15,pay_bill
+i want to see payment history,transaction_history
+pay 1000 for my dth bill,pay_bill
+send 400 inr to isha,send_money
+electricity bill pay 25,pay_bill
+what have i paid recently,transaction_history
+show my last 10 payments,transaction_history
+show me my payment history,transaction_history
+i'd like to transfer 10 to arun,send_money
+i'd like to transfer 75 to varun,send_money
+pay amit an amount of 200 rupees,send_money
+please send 5 rupee's to divya,send_money
+pay the mobile bill,pay_bill
+pay amit 2 rupees,send_money
+pay 1000 for internet,pay_bill
+send 15 rupee to sneha,send_money
+pay insurance 75 rupees,pay_bill
+can you transfer 400 rupees to vijay,send_money
+just send 75 to harish,send_money
+settle gas bill of 20,pay_bill
+pay credit card bill of 75 rupees,pay_bill
+what are my recent transactions,transaction_history
+show past transactions,transaction_history
+please pay my phone bill of 20,pay_bill
+can you transfer 100 rupees to ram,send_money
+what are my recent transactions,transaction_history
+move 15 to isha's account,send_money
+current balance check,check_balance
+display account balance,check_balance
+send like ashok 25 rupees,send_money
+quickly send 300 to anu,send_money
+please pay credit card bill 150,pay_bill
+list my transactions,transaction_history
+previous transactions,transaction_history
+show my account balance,check_balance
+show me balance,check_balance
+display my balance,check_balance
+settle internet bill of 500,pay_bill
+i want to know my balance,check_balance
+please do a transfer of 1500 to nisha,send_money
+pay credit card bill actually,pay_bill
+show my last 10 payments,transaction_history
+recent activity please,transaction_history
+pay for my phone,pay_bill
+tell me my balance,check_balance
+pay my phone bill,pay_bill
+show balance,check_balance
+please settle mobile bill,pay_bill
+i need to check my balance,check_balance
+payment of 10 to swati please,send_money
+insurance recharge 500,pay_bill
+forward 10 to pooja,send_money
+send mohit 75,send_money
+what payments did i make,transaction_history
+do transfer 100 to rohan,send_money
+settle mobile bill of 20,pay_bill
+payment history,transaction_history
+give me my transaction details,transaction_history
+show recent activity,transaction_history
+send 300 rupees to sanjay,send_money
+show my recent payments,transaction_history
+pay water 2000 rupees,pay_bill
+insurance recharge 15,pay_bill
+send 250 to mohit please,send_money
+how much do i have in my account,check_balance
+can you check my balance,check_balance
+i want to pay my water bill,pay_bill
+i'd like to transfer 400 to rohan,send_money
+what's my remaining balance,check_balance
+pay credit card charges,pay_bill
+display last 5 transactions,transaction_history
+can you transfer 20 rupees to sanjay,send_money
+can you show my balance,check_balance
+pay priya 5 rupees,send_money
+pay 300 to ananya,send_money
+check balance please,check_balance
+transfer 50 rs to harish,send_money
+transfer 500 rupes to seema,send_money
+um give 100 rupees to pooja,send_money
+process credit card payment,pay_bill
+what have i paid recently,transaction_history
+clear water bill,pay_bill
+send nisha 25 rupees,send_money
+check balance please,check_balance
+please send 100 rupees to vikram,send_money
+i want to pay my broadband bill,pay_bill
+recent payments,transaction_history
+display my transactions,transaction_history
+what's my remaining balance uh,check_balance
+show my previous transactions,transaction_history
+show my recent payments,transaction_history
+broadband payment 500 please,pay_bill
+pay 1500 for my phone bill,pay_bill
+send 400 rupee to pooja,send_money
+process payment of 15 to rohan,send_money
+show recent activity,transaction_history
+i want to see my transactions,transaction_history
+please send 750 rupee's to ravi,send_money
+my payment history please,transaction_history
+pay mohit an amount of 400 rupees,send_money
+please pay gas bill 100,pay_bill
+how much money is left,check_balance
+how much is in my account,check_balance
+pay 50 for electricity,pay_bill
+please pay dth bill 750,pay_bill
+just send 2 to sanjay,send_money
+process payment of 5 to rekha,send_money
+i need to check my balance,check_balance
+pay credit card recharge of like 100,pay_bill
+i need to pay broadband bill,pay_bill
+available balance please,check_balance
+show me how much money i have,check_balance
+sent 15 to swati,send_money
+make broadband payment of 50,pay_bill
+pay 2000 rs for my broadband,pay_bill
+show all recent transactions,transaction_history
+pay 20 to swati,send_money
+show previous payments,transaction_history
+send money to sunita 200 rupees,send_money
+clear internet bill,pay_bill
+what is the available balance,check_balance
+i need to check my balance,check_balance
+show previous payments,transaction_history
+dth bill payment of 15 rupees,pay_bill
+balance check,check_balance
+basically check my balance,check_balance
+make a payment of 2000 to arun,send_money
+i want to see my transactions,transaction_history
+please send 5 rupees to geeta,send_money
+what's okay account balance,check_balance
+i want to transfer 2000 to amit right now,send_money
+send rajesh 25,send_money
+i want to send 2000 to sachin,send_money
+please send 250 rupees to suresh,send_money
+show previous payments,transaction_history
+show previous payments,transaction_history
+show all recent transactions,transaction_history
+how much is in my account,check_balance
+make payment 2000 rupees to rekha,send_money
+transaction history,transaction_history
+send pankaj 15,send_money
+payment of 200 to rohan please,send_money
+pay for my internet,pay_bill
+check balance please,check_balance
+i want to pay arjun 2000,send_money
+tell me the balance,check_balance
+settle my credit card bill,pay_bill
+what's my account balance,check_balance
+send 750 inr to anil,send_money
+pay 400 rupees for broadband bill,pay_bill
+pay for broadband,pay_bill
+pay bhavna 50 rupees,send_money
+send harish 500 rupees,send_money
+how much do i have in my account,check_balance
+show last 20 transactions,transaction_history
+check balance please,check_balance
+can you show my transaction history,transaction_history
+pay credit card 25 rupees,pay_bill
+how much money is left,check_balance
+just send 1000 to manish,send_money
+show last 7 transactions,transaction_history
+show my recent payments,transaction_history
+i so need to pay broadband bill,pay_bill
+pay 100 for phone,pay_bill
+check my balance,check_balance
+settle phone dues of 400,pay_bill
+quickly send 250 to rekha,send_money
+process broadband payment,pay_bill
+pay for my gas,pay_bill
+can you check my balance,check_balance
+past 15 transactions please,transaction_history
+how much is in my account,check_balance
+can you show my transaction history,transaction_history
+what's left in my account,check_balance
+clear my broadband bill of 50,pay_bill
+last few transactions,transaction_history
+what's my remaining balance,check_balance
+pay my insurance dues,pay_bill
+process payment of 100 to deepa,send_money
+send some money to ashok 1500 rupees,send_money
+make payment for internet 25 rupees so,pay_bill
+send 20 rs to kavya,send_money
+what transactions did i make,transaction_history
+show me what i spent recently,transaction_history
+show me recent activity,transaction_history
+what's my account balance,check_balance
+make insurance bill payment,pay_bill
+do transfer 15 to manish,send_money
+tell me my balance,check_balance
+tell me the balance,check_balance
+please tell me basically my balance,check_balance
+make a payment of 1000 to varun,send_money
+can you please send 2 rs to ram,send_money
+quickly send 1500 to geeta,send_money
+please pay 75 rupees to pooja,send_money
+display my balance,check_balance
+last few transactions,transaction_history
+credit card bill payment of 1000 rupees,pay_bill
+pay 2 rs for my mobile well,pay_bill
+last transactions,transaction_history
+i want to pay broadband bill of 300,pay_bill
+send 2 inr to pooja,send_money
+please pay 25 rupees to manish,send_money
+pay 1 to suresh,send_money
+pay 750 for my water bill,pay_bill
+payment history,transaction_history
+pankaj ko 25 rupees bhejo,send_money
+available balance please,check_balance
+dth payment 50 please,pay_bill
+pay electricity charges,pay_bill
+make payment for insurance 1000 rupees,pay_bill
+insurance bill payment of 10 rupees,pay_bill
+balance inquiry,check_balance
+make payment for electricity 250 rupees,pay_bill
+forward 75 to sunita,send_money
+please do a transfer of 1500 to amit,send_money
+what is my uh current account balance,check_balance
+please pay gas bill 500,pay_bill
+transfer 100 to rekha,send_money
+show me recent activity,transaction_history
+i want to send 2 to mohit,send_money
+meera ko 25 rupees bhejo,send_money
+my transactions,transaction_history
+transfer 250 rupees to dhanush's account,send_money
+show my last 20 payments,transaction_history
+electricity recharge 20,pay_bill
+so balance please,check_balance
+show me my payment history,transaction_history
+pay gas bill,pay_bill
+can you check my balance,check_balance
+make like a payment of 500 to harish,send_money
+recent transaction list,transaction_history
+settle water dues of 100,pay_bill
+mobile payment 300 please,pay_bill
+phone recharge 750,pay_bill
+pay gas bill of 300 rupees,pay_bill
+settle electricity dues of 2,pay_bill
+clear insurance bill,pay_bill
+process payment of 100 to geeta,send_money
+move 50 to kavya's account,send_money
+please pay dth bill 750,pay_bill
+can you please so send 2000 rs to kumar,send_money
+kindly transfer 1 to deepa,send_money
+i want to see my transactions,transaction_history
+pay 1 rupees sita ko,send_money
+kindly transfer 400 to harish,send_money
+display my balance,check_balance
+i want to pay ravi 1000,send_money
+whats my balance,check_balance
+send 2000 rupee to sunita,send_money
+settle my dth bill,pay_bill
+what is my balance,check_balance
+view my transactions,transaction_history
+show me recent activity,transaction_history
+kindly transfer 400 to ashok,send_money
+send 200 rupee to arun,send_money
+please do a transfer of 75 to anu,send_money
+send mohit 100,send_money
+make insurance bill payment,pay_bill
+my payment history please,transaction_history
+please send 2 rupees to rohan,send_money
+current balance check,check_balance
+i'd like to transfer 50 to rohan,send_money
+gas payment 400 please,pay_bill
+please settle electricity bill,pay_bill
+pay gas 2000 rupees,pay_bill
+what is my balance okay,check_balance
+show last 5 transactions,transaction_history
+initiate a transfer of 50 rupees to ganesh,send_money
+what have i paid recently,transaction_history
+pay neha 500 rupees,send_money
+balance kitna hai,check_balance
+how much money is in my account,check_balance
+history of my payments,transaction_history
+show me what i spent recently,transaction_history
+show my recent payments,transaction_history
+pay credit card bill of 15 rupees,pay_bill
+i'd like to transfer 200 to sita,send_money
+insurance bill pay 400,pay_bill
+how much do i have in my account,check_balance
+settle my internet bill,pay_bill
+pay my broadband bill,pay_bill
+check my balance,check_balance
+display last 7 transactions,transaction_history
+recent transaction history,transaction_history
+pay the broadband bill,pay_bill
+recent activity please,transaction_history
+balance inquiry,check_balance
+pay my internet dues,pay_bill
+display my transactions,transaction_history
+what is balance,check_balance
+i want to check my balance,check_balance
+whats my balance,check_balance
+display my balance,check_balance
+send 50 to rekha please,send_money
+history of my payments,transaction_history
+what is the available balance,check_balance
+show me my balance,check_balance
+i want to pay harish 2000,send_money
+remaining balance,check_balance
+how much is in my account,check_balance
+show transaction history,transaction_history
+check balance please,check_balance
+my transactions,transaction_history
+my current balance,check_balance
+pay insurance recharge of 5,pay_bill
+transfer 150 to sneha okay,send_money
+show previous payments,transaction_history
+pay my phone bill,pay_bill
+what are my recent transactions,transaction_history
+give 300 rupees to geeta,send_money
+my payment history please,transaction_history
+water payment actually 750 please,pay_bill
+recharge dth for 5,pay_bill
+my recent activity,transaction_history
+internet basically bill pay 1500,pay_bill
+available balance please,check_balance
+pay 1000 for um insurance bill,pay_bill
+pay 300 for my electricity bill,pay_bill
+pay 300 for my dth bill,pay_bill
+balance kitna hai,check_balance
+transfer 300 rupees isha,send_money
+check account balance,check_balance
+recent transaction list,transaction_history
+my current balance,check_balance
+available balance please,check_balance
+please pay my insurance bill of 150,pay_bill
+sand 150 rupees to rohan,send_money
+whats my balance,check_balance
+pay the water bill,pay_bill
+make a payment of 500 to pooja,send_money
+what is the available balance,check_balance
+what is current account balance,check_balance
+clear my insurance bill of 15,pay_bill
+please send 150 rupees to divya,send_money
+pay 2 to rajesh,send_money
+can you pay my dth bill,pay_bill
+please tell me my balance,check_balance
+display my okay transactions,transaction_history
+display recent transactions,transaction_history
+history of my payments,transaction_history
+make payment for broadband 5 rupees,pay_bill
+my recent activity,transaction_history
+show my last 15 payments,transaction_history
+i need to check my balance,check_balance
+make payment for broadband 20 rupees,pay_bill
+what's my remaining balance,check_balance
+pay credit card bill,pay_bill
+recent transaction history,transaction_history
+recent transaction history,transaction_history
+what do i have in my account,check_balance
+past 20 transactions please,transaction_history
+payment history,transaction_history
+can you pay my broadband bill,pay_bill
+please pay insurance bill 1,pay_bill
+what is my current account balance,check_balance
+i want to know my balance,check_balance
+payment history,transaction_history
+show recent payments,transaction_history
+payment of 1000 to arjun please,send_money
+tell me my balance,check_balance
+previous transactions,transaction_history
+show all recent transactions,transaction_history
+list my transactions,transaction_history
+display recent transactions,transaction_history
+mera balance batao,check_balance
+send 1 to harish please,send_money
+make payment for dth 750 rupees,pay_bill
+mobile bill pay 400,pay_bill
+geeta ko 500 rupees bhejo,send_money
+recent transaction list,transaction_history
+pay phone bill of 1000 rupees,pay_bill
+show past transactions,transaction_history
+check account uh balance,check_balance
+can you show my balance,check_balance
+my current balance,check_balance
+please pay insurance bill 50,pay_bill
+please do a transfer of 1500 to vikram,send_money
+make payment 100 rupees to pooja,send_money
+i want to see payment history,transaction_history
+what's my current balance,check_balance
+pay 50 rs for my insurance,pay_bill
+how much money do i have,check_balance
+send money to seema 150 rupees,send_money
+ram ko 1000 rupees bhejo,send_money
+view my transactions,transaction_history
+transfer 50 rupees to kavya's account,send_money
+i want to check my balance,check_balance
+what is the available balance,check_balance
+pay insurance bill of 100 rupees,pay_bill
+transaction history,transaction_history
+do transfer 25 to sachin,send_money
+pay electricity dues,pay_bill
+pay nisha 200 rupees,send_money
+what transactions did i make,transaction_history
+remaining balance,check_balance
+insurance bill of 50 rupees,pay_bill
+tell me the balance,check_balance
+mobile payment 15 please,pay_bill
+please settle electricity bill,pay_bill
+send some money to ram 100 rupees,send_money
+pay 1000 rupees for mobile bill,pay_bill
+whats my balance,check_balance
+check balance please,check_balance
+what is the available balance,check_balance
+what is the available balance,check_balance
+check my balance,check_balance
+send 100 rupee to neha,send_money
+i want to transfer 2000 to sachin right now,send_money
+total balance,check_balance
+sand 1000 rupees to isha,send_money
+what's my current balance,check_balance
+can you show my transaction history,transaction_history
+i need to send 75 rupees to mohit,send_money
+i want to see my transactions,transaction_history
+show my recent payments,transaction_history
+pay 2 to anil,send_money
+settle my water bill,pay_bill
+what's okay my remaining balance,check_balance
+what do i have in my account,check_balance
+display recent transactions,transaction_history
+previous transactions,transaction_history
+how much is in my account,check_balance
+what is the balance in my account,check_balance
+pay the broadband bill,pay_bill
+pay 750 for broadband,pay_bill
+mera balance batao,check_balance
+how much money is in my account,check_balance
+what transactions did i make,transaction_history
+my recent activity,transaction_history
+i need to send 150 rupees to sanjay,send_money
+please pay my phone bill of 300,pay_bill
+show my previous transactions,transaction_history
+show my recent transactions,transaction_history
+i want to see my transactions,transaction_history
+recent transaction history,transaction_history
+show me recent activity,transaction_history
+pay my phone bill,pay_bill
+pay vijay an amount of 250 rupees,send_money
+pay insurance charges,pay_bill
+show previous payments,transaction_history
+how much money is left,check_balance
+settle my phone bill,pay_bill
+recent transaction list,transaction_history
+balance check,check_balance
+i want to know my balance,check_balance
+show me my balance,check_balance
+what is my current account balance,check_balance
+remaining balance,check_balance
+send rajesh 250 rupees,send_money
+i need to send 15 rupees to suresh,send_money
+display recent transactions,transaction_history
+what is my current account balance,check_balance
+payment history,transaction_history
+send 5 rupee to ram,send_money
+display last 7 transactions,transaction_history
+tell me my balance,check_balance
+insurance recharge 200,pay_bill
+recent activity please,transaction_history
+recent transaction list,transaction_history
+check balance please,check_balance
+pay 200 for mobile,pay_bill
+can you please send 20 rs to kavya,send_money
+show me what i spent recently,transaction_history
+insurance payment 2 please,pay_bill
+show transactions,transaction_history
+make payment for phone 1500 rupees,pay_bill
+last transactions,transaction_history
+send 10 inr to dhanush,send_money
+pay for my mobile,pay_bill
+i want to transfer 15 to harish right now,send_money
+show previous payments,transaction_history
+make water payment actually of 2000,pay_bill
+pay 500 rs for my credit card,pay_bill
+show transactions,transaction_history
+credit card bill pay 100,pay_bill
+check account balance,check_balance
+manish ko 5 rupees bhejo,send_money
+how much balance do i have,check_balance
+i need to pay internet bill,pay_bill
+how much balance do i have,check_balance
+make payment for credit card 750 rupees,pay_bill
+insurance bill pay 25,pay_bill
+could you send 100 to vivek,send_money
+what do i have in my account,check_balance
+recent payments,transaction_history
+clear phone bill,pay_bill
+pay credit card recharge of 150,pay_bill
+please transfer 2000 rs to meera,send_money
+i want to send 750 to neha,send_money
+make a payment of 100 to ashok,send_money
+make phone bill payment,pay_bill
+show all recent transactions,transaction_history
+what is my balance,check_balance
+transaction history,transaction_history
+show my account balance,check_balance
+pay the credit card bill,pay_bill
+i want to pay my insurance bill,pay_bill
+show me how much money i have,check_balance
+i want to transfer 20 to pooja right now,send_money
+list my transactions,transaction_history
+show all recent transactions,transaction_history
+i need to send 400 rupees to lakshmi,send_money
+sand 500 rupees to sita,send_money
+can you transfer 5 rupees to bhavna,send_money
+history of my payments,transaction_history
+pay broadband charges,pay_bill
+initiate a transfer of 2000 rupees to arjun,send_money
+what is the balance in my account,check_balance
+check account balance,check_balance
+show transaction history,transaction_history
+pay credit card 150 rupees,pay_bill
+what's my current balance,check_balance
+recharge credit card for 5,pay_bill
+initiate a transfer of 1000 rupees to anil,send_money
+my balance,check_balance
+settle water bill of 20,pay_bill
+show my recent transactions,transaction_history
+show all recent transactions,transaction_history
+send rohan 50,send_money
+please send 2 rupees to vikram,send_money
+how much money is in my account,check_balance
+available balance please,check_balance
+pay gas bill,pay_bill
+pay my mobile dues,pay_bill
+can you transfer 400 rupees to lakshmi,send_money
+show transactions,transaction_history
+pay 2 rupees for dth bill,pay_bill
+please pay my internet bill of 750,pay_bill
+basically give me my transaction details,transaction_history
+show me recent activity,transaction_history
+please pay phone bill 50,pay_bill
+phone recharge 75,pay_bill
+i need to pay water bill,pay_bill
+what's my account balance,check_balance
+please pay my mobile bill of 2,pay_bill
+transaction list,transaction_history
+what's my current balance,check_balance
+what are my recent transactions,transaction_history
+forward 100 to ram,send_money
+show balance,check_balance
+phone bill payment of 20 rupees,pay_bill
+transfer 750 to ashok,send_money
+list recent payments,transaction_history
+pay electricity bill of 150 rupees,pay_bill
+electricity payment 100 please,pay_bill
+list recent payments,transaction_history
+please tell me my balance,check_balance
+give 2000 rupees to sunita,send_money
+recent transaction list,transaction_history
+pay the so phone bill,pay_bill
+what did i pay recently,transaction_history
+transaction list,transaction_history
+my payment history please,transaction_history
+please pay my broadband bill of 15,pay_bill
+what transactions did i make,transaction_history
+list recent payments,transaction_history
+how much is in my account,check_balance
+send some money to rohan 2 rupees,send_money
+move 15 to swati's account,send_money
+i want to send 300 to rahul,send_money
+i want to check my balance,check_balance
+what well i have in my account,check_balance
+broadband recharge 1,pay_bill
+my recent activity,transaction_history
+payment history,transaction_history
+how much balance do i have,check_balance
+can you transfer 20 rupees to rajesh,send_money
+display account balance,check_balance
+show previous payments,transaction_history
+so pay electricity recharge of 500,pay_bill
+tell me my balance,check_balance
+process payment of 2 to nisha,send_money
+show me my payment history,transaction_history
+recharge credit card for 150,pay_bill
+what's okay my remaining balance,check_balance
+gas bill of 1 rupees,pay_bill
+swati ko 400 rupees bhejo,send_money
+transfer 400 rs to danish,send_money
+what's my account balance,check_balance
+tell me my balance,check_balance
+history of my payments,transaction_history
+my balance,check_balance
+display my transactions,transaction_history
+tell me the balance,check_balance
+payment history,transaction_history
+pay 250 for insurance,pay_bill
+i need to check my balance,check_balance
+quickly send 10 to amit,send_money
+please transfer 2000 rs to uh priya,send_money
+whats my balance,check_balance
+recent activity please,transaction_history
+send 1000 rupees to manish,send_money
+please transfer 1000 rs to seema,send_money
+i want to see payment history,transaction_history
+send amit 250,send_money
+transfer money to anil amount 2000,send_money
+okay my balance,check_balance
+what transactions did i make,transaction_history
+pay 400 rupees for dth bill,pay_bill
+can you show my transaction history,transaction_history
+what did i pay recently,transaction_history
+send suresh 10,send_money
+send some money to rekha 10 rupees,send_money
+show my previous transactions,transaction_history
+pay broadband 10 rupees,pay_bill
+show my account balance,check_balance
+credit card payment 400 please,pay_bill
+show my account balance,check_balance
+tell me my balance,check_balance
+what's my account balance,check_balance
+pay my internet okay dues,pay_bill
+payment of 300 to ananya please,send_money
+show transactions,transaction_history
+can you pay my gas bill,pay_bill
+i want to check balance,check_balance
+show past transactions,transaction_history
+show me my payment history,transaction_history
+make phone bill payment,pay_bill
+forward 10 to seema,send_money
+remaining balance,check_balance
+make a payment of 100 to ananya,send_money
+history of my payments,transaction_history
+my recent activity,transaction_history
+pay 20 rs for my water,pay_bill
+pay rohan an amount of 5 rupees,send_money
+pay phone 20 rupees,pay_bill
+tell me the balance,check_balance
+i need to send 1500 rupees to divya,send_money
+my payment history please,transaction_history
+payment history,transaction_history
+settle my mobile bill,pay_bill
+view my transactions,transaction_history
+gas payment 200 please,pay_bill
+account balance please,check_balance
+kindly transfer 300 to anil,send_money
+recent activity please,transaction_history
+transfer money to priya amount 20,send_money
+internet bill pay 150,pay_bill
+pay my dth dues,pay_bill
+pay 15 for my phone bill,pay_bill
+dth bill of 15 rupees,pay_bill
+how much balance do i have,check_balance
+show me what i spent recently,transaction_history
+i want to see my transactions,transaction_history
+recharge gas for 500,pay_bill
+pay broadband charges,pay_bill
+display recent transactions,transaction_history
+display last 15 transactions,transaction_history
+what payments did i make,transaction_history
+i want to pay my phone bill,pay_bill
+recharge insurance for 750,pay_bill
+what is my balance,check_balance
+i want to transfer 75 to pankaj right now,send_money
+last transactions,transaction_history
+send 1500 to sneha please,send_money
+pay the gas bill,pay_bill
+send some money to divya 1500 rupees,send_money
+gas bill payment of 250 rupees actually,pay_bill
+pay 50 to dhanush,send_money
+transfer money to harish amount 1000,send_money
+please pay internet bill 150,pay_bill
+what is my balance,check_balance
+i want to check my balance,check_balance
+pay insurance 150 rupees,pay_bill
+send lakshmi 1000 rupees,send_money
+how much money do i have,check_balance
+how much money is in my account,check_balance
+please send 400 rupees to sachin well,send_money
+what are my recent transactions,transaction_history
+pay 2 rupees for mobile bill,pay_bill
+balance inquiry,check_balance
+recent payments,transaction_history
+show account balance,check_balance
+view my transactions,transaction_history
+how much money do i have,check_balance
+send 5 rupee uh to danish,send_money
+history of my payments,transaction_history
+clear my dth bill of 200,pay_bill
+balance kitna hai,check_balance
+tell me my balance,check_balance
+make payment 1 rupees to amit,send_money
+previous transactions,transaction_history
+show me recent activity,transaction_history
+last transactions,transaction_history
+show past transactions,transaction_history
+last transactions,transaction_history
+send 100 rupees to swati,send_money
+i want to pay dth bill of 25,pay_bill
+how much do i have in my account,check_balance
+phone bill of 1000 rupees,pay_bill
+transaction list,transaction_history
+how much is in my account,check_balance
+display my balance,check_balance
+i want to pay pankaj 100,send_money
+settle my mobile bill,pay_bill
+pay 750 rupees for mobile bill,pay_bill
+settle insurance bill of 300,pay_bill
+please settle credit card bill,pay_bill
+recent activity please,transaction_history
+settle broadband dues of 1500,pay_bill
+show me how much money i have,check_balance
+i'd like to transfer 400 to ram,send_money
+transfer 1 rupes to nisha,send_money
+show transactions,transaction_history
+um mobile bill payment of 1000 rupees,pay_bill
+what's my current balance,check_balance
+send some money to danish 1000 rupees,send_money
+how much money is left,check_balance
+what were my last transactions,transaction_history
+display last 5 transactions,transaction_history
+send 1500 rs to sneha,send_money
+move 2 to rohan's account,send_money
+transfer 1500 rupees to isha's account,send_money
+what were my last transactions,transaction_history
+total balance,check_balance
+display my transactions,transaction_history
+how much balance do i have,check_balance
+what did i pay recently,transaction_history
+show me recent activity,transaction_history
+water bill pay 250,pay_bill
+actually move 500 to vijay's account,send_money
+clear my electricity bill of 1,pay_bill
+previous transactions,transaction_history
+show me what i spent recently,transaction_history
+i want to pay rekha 1000,send_money
+my current balance,check_balance
+past 5 transactions please,transaction_history
+show past transactions,transaction_history
+pay the dth bill,pay_bill
+kindly transfer 1 to rohan,send_money
+check account balance,check_balance
+do transfer 10 to suresh,send_money
+what's current balance,check_balance
+pay for my water,pay_bill
+how much money is left,check_balance
+tell me balance,check_balance
+last few transactions,transaction_history
+pay 25 for my water bill,pay_bill
+what have basically i paid recently,transaction_history
+last transactions,transaction_history
+i want to see payment history,transaction_history
+clear mobile bill,pay_bill
+show balance,check_balance
+what is my balance,check_balance
+sand 1500 rupees to arun,send_money
+show my last 7 payments,transaction_history
+i want to see my transactions,transaction_history
+current balance check,check_balance
+clear water bill of 200,pay_bill
+pay credit card bill,pay_bill
+pay internet charges,pay_bill
+total balance,check_balance
+can you pay insurance bill,pay_bill
+balance check,check_balance
+can you check basically my balance,check_balance
+clear gas bill,pay_bill
+what were my last transactions,transaction_history
+water payment 750 please,pay_bill
+show all recent transactions,transaction_history
+forward 750 to lakshmi,send_money
+show my last 15 payments,transaction_history
+pay credit card charges,pay_bill
+list my transactions,transaction_history
+give me my transaction details,transaction_history
+credit card bill pay 1,pay_bill
+total balance,check_balance
+pay varun an amount of 500 rupees,send_money
+pay my electricity dues,pay_bill
+make payment 2000 rupees to manish,send_money
+whats my balance,check_balance
+how much is in my account,check_balance
+how much money is in my account,check_balance
+send danish 400,send_money
+send money to anu 1 rupees,send_money
+show my recent transactions,transaction_history
+please pay 500 rupees to divya,send_money
+give 25 rupees to kumar,send_money
+what is my balance,check_balance
+send 250 rupee to pooja,send_money
+show my last 10 payments,transaction_history
+recent transaction list,transaction_history
+what is the available balance,check_balance
+account balance please,check_balance
+whats my balance,check_balance
+how much balance do i have,check_balance
+my payment history please,transaction_history
+send 15 to ganesh please,send_money
+can you show my balance,check_balance
+display recent transactions,transaction_history
+i want to pay vikram 150,send_money
+last transactions,transaction_history
+what did i pay recently,transaction_history
+pay 20 rs for my gas,pay_bill
+pay 25 rupees for internet bill,pay_bill
+tell me the balance,check_balance
+please tell me my balance,check_balance
+how much money is left,check_balance
+send 500 rs uh to manish,send_money
+sent 50 to mohit,send_money
+previous transactions,transaction_history
+show me how much money i have,check_balance
+settle mobile dues of 5,pay_bill
+water bill pay 15,pay_bill
+what is the available balance,check_balance
+give 10 rupees to suresh,send_money
+dth bill payment of 1500 rupees,pay_bill
+display my balance,check_balance
+just send 5 to ravi,send_money
+quickly send 250 to anu,send_money
+send sunita 400 rupees,send_money
+what is my current account balance,check_balance
+please tell me my balance,check_balance
+can you pay my insurance bill,pay_bill
+i need to pay internet bill,pay_bill
+send 300 rupees to sita,send_money
+internet bill pay 1000,pay_bill
+show me what i spent recently,transaction_history
+pay 1 rupees for internet bill,pay_bill
+balance inquiry,check_balance
+pay geeta an amount of 2000 rupees,send_money
+balance kitna hai,check_balance
+anil ko 1 rupees bhejo,send_money
+forward 2 to geeta,send_money
+show last 5 transactions,transaction_history
+kindly transfer 50 to karthik,send_money
+send seema 250,send_money
+show my like last 7 payments,transaction_history
+bhavna ko 50 rupees bhejo,send_money
+show last 5 transactions,transaction_history
+transfer money to rajesh amount 150,send_money
+show me my payment history,transaction_history
+last few transactions,transaction_history
+process payment of 15 to geeta,send_money
+payment of 15 to sunita please,send_money
+i want to check my balance um,check_balance
+how much money do i have,check_balance
+send sunita 1500 rupees,send_money
+i want to see payment history,transaction_history
+please transfer 50 rs to pankaj,send_money
+last transactions,transaction_history
+pay internet bill of 25 rupees,pay_bill
+what did i pay recently,transaction_history
+pay mobile recharge of 1500,pay_bill
+i want to pay my internet bill,pay_bill
+tell me the balance,check_balance
+show past transactions,transaction_history
+send 1000 rupees to kumar,send_money
+settle credit card bill of 10,pay_bill
+whats my balance,check_balance
+how much balance do i have,check_balance
+pay my water bill,pay_bill
+initiate a transfer of 2 rupees to danish,send_money
+show all recent transactions,transaction_history
+i'd like to transfer 400 to deepa,send_money
+pay 100 to nisha,send_money
+view my transactions basically,transaction_history
+pay for my insurance,pay_bill
+display my balance,check_balance
+what's my remaining balance,check_balance
+make broadband payment of 150,pay_bill
+transfer 400 rs to rahul,send_money
+pay for my dth,pay_bill
+give 400 rupees to suresh,send_money
+can you please send 200 rs to sneha,send_money
+pay the mobile bill,pay_bill
+tell me my balance,check_balance
+check account balance,check_balance
+how much money is in my account,check_balance
+send some money to sanjay 75 rupees,send_money
+sent 25 to bhavna,send_money
+pay 50 for my phone bill,pay_bill
+please pay insurance bill 1500,pay_bill
+pay the gas bill,pay_bill
+what do i have in account,check_balance
+show my recent transactions,transaction_history
+i need to pay water bill,pay_bill
+danish ko 500 rupees bhejo,send_money
+show me recent activity,transaction_history
+show me recent activity,transaction_history
+pay anu an amount of 400 rupees,send_money
+sand 750 rupees to danish,send_money
+i want to send 2000 to karthik,send_money
+please pay my broadband bill of 750,pay_bill
+please tell me my balance,check_balance
+list recent payments,transaction_history
+make broadband payment of 100,pay_bill
+dth payment 100 please,pay_bill
+how much money do i have,check_balance
+transfer 20 rupes to sneha,send_money
+show past transactions,transaction_history
+please do a transfer of 150 to rohan,send_money
+check balance please,check_balance
+please tell me my balance,check_balance
+last transactions,transaction_history
+show my previous transactions,transaction_history
+check balance please,check_balance
+what is my balance,check_balance
+show previous payments,transaction_history
+previous transactions,transaction_history
+show my account balance,check_balance
+can you pay my phone bill,pay_bill
+my balance,check_balance
+recent transaction history,transaction_history
+my payment history please,transaction_history
+pay for my electricity,pay_bill
+pay insurance 2 rupees,pay_bill
+please pay my mobile bill of 1000,pay_bill
+display my transactions,transaction_history
+pay nisha an amount of 500 rupees,send_money
+display last 20 transactions,transaction_history
+pay 2 to ram,send_money
+i want to check my balance,check_balance
+i need to check my balance,check_balance
+can you check actually my balance,check_balance
+sent 20 to vijay,send_money
+view my transactions,transaction_history
+mera balance batao,check_balance
+send harish 15,send_money
+settle phone bill of 2000,pay_bill
+pay electricity 25 rupees,pay_bill
+previous transactions,transaction_history
+i want to check my balance,check_balance
+whats my balance um,check_balance
+previous transactions,transaction_history
+what were my last transactions,transaction_history
+pay mobile charges,pay_bill
+pay my mobile dues,pay_bill
+balance check,check_balance
+show me how much money i have,check_balance
+display last 10 transactions,transaction_history
+how much is in my account,check_balance
+send 1500 to anu please,send_money
+show me my payment history,transaction_history
+please pay mobile bill 500,pay_bill
+show me recent activity,transaction_history
+internet bill pay 25,pay_bill
+i want to transfer 25 to sunita right now,send_money
+give me my transaction details,transaction_history
+can you please send 1 rs to pankaj,send_money
+show past transactions,transaction_history
+please transfer 150 rs to ravi uh,send_money
+how much money do i have,check_balance
+show transaction history,transaction_history
+show my recent transactions,transaction_history
+history of my payments,transaction_history
+i want to see payment history,transaction_history
+pay 10 for broadband,pay_bill
+how much money do i have,check_balance
+how much do i uh have in my account,check_balance
+check my balance,check_balance
+quickly send 400 to sanjay,send_money
+can you pay my phone bill,pay_bill
+show transactions,transaction_history
+show transactions,transaction_history
+show my recent payments,transaction_history
+list recent payments,transaction_history
+pay 1500 for my gas bill,pay_bill
+show my recent payments,transaction_history
+tell me my balance,check_balance
+whats my balance,check_balance
+show me payment history,transaction_history
+broadband recharge 150,pay_bill
+process payment of 15 to dhanush,send_money
+i want to send 50 to ram,send_money
+what is the balance in account,check_balance
+please pay 400 rupees to isha,send_money
+display my balance,check_balance
+i want to see my transactions,transaction_history
+show me my balance,check_balance
+send 750 okay rs to deepa,send_money
+give 400 rupees to kumar,send_money
+history of my payments,transaction_history
+actually i need to check my balance,check_balance
+send 200 to bhavna please,send_money
+tell me my balance,check_balance
+pay my internet bill,pay_bill
+what's my account balance,check_balance
+past 7 transactions please okay,transaction_history
+make credit card bill payment,pay_bill
+i want to send 400 to anil,send_money
+sent 750 to vijay,send_money
+can you pay my mobile bill,pay_bill
+sand 1500 rupees to vivek,send_money
+check account balance,check_balance
+account balance please,check_balance
+pay gas bill of 20 rupees,pay_bill
+pay water recharge of 1500,pay_bill
+settle water dues of 1000,pay_bill
+how much balance do i have,check_balance
+i need to send 1000 rupees to deepa,send_money
+pay internet charges,pay_bill
+can you show my transaction history,transaction_history
+list recent payments,transaction_history
+pay dth bill,pay_bill
+send pooja 2000 rupees,send_money
+transaction list,transaction_history
+pay bhavna an amount of 250 rupees,send_money
+what were my last transactions,transaction_history
+how much balance do i have,check_balance
+do transfer 10 to sita,send_money
+i want to pay ravi 300,send_money
+can you transfer 500 rupees to dhanush,send_money
+can you show my transaction history,transaction_history
+just send 2000 to rahul,send_money
+i need to send 1500 rupees to dhanush,send_money
+i want to transfer 300 to seema right now,send_money
+transfer 150 rupees lakshmi,send_money
+pay 10 rupees vijay ko,send_money
+wire 2 to arjun,send_money
+send 2000 inr to vivek,send_money
+settle my dth bill,pay_bill
+pay dth charges,pay_bill
+past 15 transactions please,transaction_history
+my transactions,transaction_history
+pay the electricity bill,pay_bill
+show previous payments,transaction_history
+clear insurance bill,pay_bill
+what transactions did i make,transaction_history
+what have i paid recently,transaction_history
+my balance,check_balance
+balance check,check_balance
+i want to see my okay transactions,transaction_history
+last few transactions,transaction_history
+basically pay electricity bill,pay_bill
+pay my phone bill,pay_bill
+i want to check my balance,check_balance
+show my recent transactions,transaction_history
+settle dth bill,pay_bill
+tell me the balance uh,check_balance
+pay internet dues,pay_bill
+send 25 inr to danish,send_money
+send 10 rupees to vijay,send_money
+make payment 2000 rupees to suresh,send_money
+i need basically to pay broadband bill,pay_bill
+please pay internet bill 200,pay_bill
+transfer 15 rupees arjun,send_money
+transaction list,transaction_history
+available balance please,check_balance
+pay 25 for my internet bill,pay_bill
+past 5 transactions please,transaction_history
+i want to check my balance,check_balance
+what were my last transactions,transaction_history
+make mobile payment of 2,pay_bill
+just send 5 to karthik,send_money
+send ashok 20,send_money
+pay insurance recharge of 1000,pay_bill
+send 150 rs to geeta,send_money
+i want to pay electricity bill of 100,pay_bill
+tell me the balance,check_balance
+make electricity payment of 750,pay_bill
+what have i paid recently,transaction_history
+check balance please,check_balance
+what did i pay recently,transaction_history
+please pay my insurance bill of 250,pay_bill
+tell me the balance,check_balance
+previous transactions,transaction_history
+what have i paid recently,transaction_history
+what's my remaining balance,check_balance
+how much money is left,check_balance
+what payments did i make,transaction_history
+make insurance bill payment,pay_bill
+make a payment of 2 to lakshmi,send_money
+recharge water for 150,pay_bill
+how much balance do i have,check_balance
+do transfer 1 to sita,send_money
+i need to pay credit card bill,pay_bill
+make payment for credit card 20 rupees,pay_bill
+what is the available balance,check_balance
+show all recent transactions,transaction_history
+pay 500 rs for my well credit card,pay_bill
+i want to pay nisha 25,send_money
+transfer 200 to deepa,send_money
+pay water bill,pay_bill
+pay 150 rs for my electricity,pay_bill
+transfer 20 rupees pankaj,send_money
+electricity bill of 100 rupees,pay_bill
+available balance please,check_balance
+what's my remaining balance,check_balance
+check my balance,check_balance
+recharge mobile for 500,pay_bill
+pay credit card bill,pay_bill
+show me my payment history,transaction_history
+history of my payments,transaction_history
+tell me my balance,check_balance
+gas recharge 200,pay_bill
+what is the balance in my account,check_balance
+how much money do i have,check_balance
+show me what i spent recently,transaction_history
+initiate a transfer of 250 rupees to pankaj,send_money
+pay 20 rupees for electricity bill,pay_bill
+could you send 300 to arun,send_money
+i need to send 1500 rupees to isha,send_money
+view my transactions,transaction_history
+transfer 150 rs to bhavna,send_money
+show past transactions,transaction_history
+show account balance,check_balance
+what's account like balance,check_balance
+recent transaction history,transaction_history
+current balance check,check_balance
+broadband recharge 200,pay_bill
+list my transactions,transaction_history
+process broadband payment,pay_bill
+can you pay my mobile bill,pay_bill
+what do i have in my account,check_balance
+check balance please,check_balance
+recharge mobile for 75 um,pay_bill
+kindly transfer 1 to mohit,send_money
+balance check,check_balance
+pay internet charges,pay_bill
+available balance please,check_balance
+send some money to ravi 15 rupees,send_money
+what did i pay recently,transaction_history
+make mobile bill payment,pay_bill
+previous transactions,transaction_history
+list my transactions,transaction_history
+what are my recent transactions,transaction_history
+please transfer 200 rs to ganesh,send_money
+show me what i spent recently,transaction_history
+previous transactions,transaction_history
+past 5 transactions please,transaction_history
+just send 1000 to divya,send_money
+display last 10 transactions,transaction_history
+total balance,check_balance
+can you check my balance,check_balance
+my payment history please,transaction_history
+anil ko 15 rupees bhejo,send_money
+sent 2000 to arun um,send_money
+total balance,check_balance
+what are recent transactions,transaction_history
+what's left in my account,check_balance
+pay arun 100 rupees,send_money
+recent transaction history,transaction_history
+remaining balance,check_balance
+mobile well payment 2 please,pay_bill
+how much balance do i have,check_balance
+make internet bill payment,pay_bill
+forward 25 to anu,send_money
+pay for my phone,pay_bill
+recent transaction history,transaction_history
+make internet payment of 1500,pay_bill
+how much do i have in my account,check_balance
+what is my balance,check_balance
+my balance,check_balance
+my balance,check_balance
+last transactions,transaction_history
+vivek ko 5 rupees bhejo,send_money
+show me my payment history,transaction_history
+tell me my balance,check_balance
+please pay mobile bill 250,pay_bill
+send some money to amit 400 rupees,send_money
+i basically want to see payment history,transaction_history
+what's okay my remaining balance,check_balance
+transfer 20 rupees manish,send_money
+display recent transactions,transaction_history
+last transactions,transaction_history
+what is my current account balance,check_balance
+settle dth dues of 500,pay_bill
+i need to pay mobile bill,pay_bill
+what is the available balance,check_balance
+please settle credit card bill,pay_bill
+past 20 transactions please,transaction_history
+i need to check my balance,check_balance
+quickly send 100 to danish,send_money
+give 100 rupees to neha,send_money
+what are my recent transactions,transaction_history
+water bill pay 250,pay_bill
+show my last 15 payments,transaction_history
+what do i have in my account,check_balance
+how much do i have in my account,check_balance
+phone bill pay 20,pay_bill
+can you show my balance,check_balance
+just send 2000 to kumar,send_money
+please send 150 rupees to arun,send_money
+pay 25 rs for gas,pay_bill
+send 2 rupees to vikram,send_money
+i want to transfer 100 to danish right now,send_money
+pay my gas dues,pay_bill
+pay 750 rupees for water bill,pay_bill
+pay broadband bill of 1500 rupees,pay_bill
+please send 10 rupee's to nisha,send_money
+send mohit okay 2000,send_money
+what is my current account balance,check_balance
+balance check,check_balance
+give 2 rupees to sachin,send_money
+show balance,check_balance
+i want to see payment history,transaction_history
+what are my recent transactions,transaction_history
+please send 5 rupee's to karthik,send_money
+pay the phone bill,pay_bill
+wire 15 to isha,send_money
+clear uh insurance bill,pay_bill
+balance kitna hai,check_balance
+pay 1000 for my credit card bill,pay_bill
+my recent activity,transaction_history
+i want to pay internet bill of 2000,pay_bill
+process payment of 150 to rajesh,send_money
+i want to pay my mobile bill,pay_bill
+sand 25 rupees to arun,send_money
+please transfer 400 rs to deepa,send_money
+my payment history please,transaction_history
+pay 2000 rs for my insurance,pay_bill
+water recharge 2,pay_bill
+my transactions,transaction_history
+how much money is left,check_balance
+balance inquiry,check_balance
+recent transaction history,transaction_history
+recent transaction list,transaction_history
+transfer money to ganesh amount 750,send_money
+show me my balance,check_balance
+payment of 25 to vivek please,send_money
+my payment history please,transaction_history
+last few transactions,transaction_history
+please tell me my balance,check_balance
+show my last 15 payments,transaction_history
+show balance,check_balance
+whats my balance,check_balance
+show all recent transactions,transaction_history
+what were my last transactions,transaction_history
+process broadband payment,pay_bill
+how much money is in my account,check_balance
+i well want to pay lakshmi 100,send_money
+give 5 rupees to meera,send_money
+i need to send 1500 rupees to sunita,send_money
+i need to check my balance,check_balance
+pay 1500 for electricity,pay_bill
+pay arjun 750 rupees,send_money
+my recent activity,transaction_history
+show me my balance,check_balance
+how much balance do i have,check_balance
+send some money to rekha 5 rupees,send_money
+display last 3 transactions,transaction_history
+give me my transaction details,transaction_history
+what do i have in my account,check_balance
+send neha 2 so rupees,send_money
+how much balance do i have,check_balance
+pay dth bill of 400 rupees,pay_bill
+kindly transfer 500 to ananya,send_money
+what have i paid recently,transaction_history
+display my transactions,transaction_history
+i need to pay insurance bill,pay_bill
+how uh much balance i have,check_balance
+transfer 1 rupees to swati's account,send_money
+balance kitna hai,check_balance
+dth payment 1000 please,pay_bill
+show recent activity,transaction_history
+pay gas bill of 20 rupees,pay_bill
+display my transactions,transaction_history
+could you send 75 to sachin,send_money
+show previous payments,transaction_history
+send 1 inr to dhanush,send_money
+what payments did i make,transaction_history
+what did i pay recently,transaction_history
+pay 200 rupees for broadband bill,pay_bill
+show my previous transactions,transaction_history
+can you show my balance,check_balance
+pay the dth bill,pay_bill
+display last 7 transactions,transaction_history
+i want to pay my insurance bill,pay_bill
+send money to harish 1000 rupees,send_money
+i want to pay electricity bill of 50,pay_bill
+please send 100 rupee's to kavya,send_money
+what's my current balance,check_balance
+clear my phone bill of 25,pay_bill
+sand 150 rupees to sachin,send_money
+send 1500 rupee to lakshmi,send_money
+whats my balance,check_balance
+initiate a transfer of 150 rupees to sita,send_money
+please do a transfer of 75 to rajesh,send_money
+settle my gas bill,pay_bill
+previous transactions,transaction_history
+i want to pay electricity bill of 75,pay_bill
+quickly send 1 to bhavna,send_money
+pay broadband 150 rupees,pay_bill
+check account like balance,check_balance
+tell me the balance,check_balance
+display last 7 transactions,transaction_history
+show all recent transactions,transaction_history
+what's left in my account,check_balance
+display my balance,check_balance
+i need to send 20 rupees to sanjay,send_money
+display my transactions,transaction_history
+gas bill payment of 5 rupees,pay_bill
+sent 2000 to sneha,send_money
+please tell me my balance,check_balance
+remaining basically balance,check_balance
+my recent activity,transaction_history
+swati ko 2000 rupees bhejo,send_money
+check balance please,check_balance
+show account balance,check_balance
+quickly send 500 to harish,send_money
+quickly send 200 to priya,send_money
+send money to anil okay 1500 rupees,send_money
+send money to sunita 50 rupees,send_money
+wire 1500 to ravi,send_money
+just send 5 to lakshmi,send_money
+send anil 5,send_money
+can you check my balance,check_balance
+pay 100 for phone,pay_bill
+what are my recent transactions,transaction_history
+payment history okay,transaction_history
+pay phone bill of 50 rupees,pay_bill
+settle broadband bill of 1500,pay_bill
+show me my payment history,transaction_history
+transfer 200 to sita,send_money
+please settle phone bill,pay_bill
+show me my payment history,transaction_history
+please pay water bill 1,pay_bill
+account balance please,check_balance
+i'd like to transfer 1500 to ananya,send_money
+process broadband payment,pay_bill
+available um balance please,check_balance
+i want to pay my dth bill,pay_bill
+i want to see my transactions,transaction_history
+current balance check,check_balance
+i want to pay mobile bill of 20,pay_bill
+pay the credit card bill,pay_bill
+pay 2000 rs for my broadband,pay_bill
+what transactions did i make,transaction_history
+how much money do i have,check_balance
+internet bill pay 20,pay_bill
+pay broadband bill of 500 rupees,pay_bill
+what's my account balance,check_balance
+display my balance,check_balance
+i want to pay electricity bill of 5,pay_bill
+balance check,check_balance
+phone payment 25 please,pay_bill
+balance please,check_balance
+settle phone bill of 15,pay_bill
+can you pay my internet bill,pay_bill
+previous transactions,transaction_history
+transfer money to amit amount 200,send_money
+transfer 1 rupees swati,send_money
+balance inquiry,check_balance
+pay 25 to ashok,send_money
+pay broadband 2 rupees,pay_bill
+i want to transfer 200 to nisha right now,send_money
+tell okay me my balance,check_balance
+recent transaction history,transaction_history
+show transaction history,transaction_history
+check balance please,check_balance
+i want to pay vikram 50,send_money
+pay gas charges,pay_bill
+what's my current balance,check_balance
+pay the broadband bill,pay_bill
+how much money is left,check_balance
+pay 150 for phone,pay_bill
+show my recent payments,transaction_history
+show me recent activity,transaction_history
+i want to send 2000 to meera,send_money
+display account balance,check_balance
+initiate a transfer of 5 rupees to isha,send_money
+give me my transaction details,transaction_history
+transfer 150 to meera,send_money
+display my transactions,transaction_history
+clear my mobile bill of 200,pay_bill
+can you transfer 2 rupees to manish,send_money
+i need to check my balance,check_balance
+what have i paid recently uh,transaction_history
+please like tell me my balance,check_balance
+display my balance,check_balance
+show account balance,check_balance
+show all recent transactions,transaction_history
+last transactions,transaction_history
+balance please,check_balance
+make payment 2000 rupees to ashok,send_money
+do transfer 250 to deepa,send_money
+internet bill pay 1500,pay_bill
+i want to pay my phone bill,pay_bill
+payment history,transaction_history
+transaction history,transaction_history
+clear my gas bill of uh 25,pay_bill
+please settle credit card bill,pay_bill
+recent activity please,transaction_history
+please settle credit card bill,pay_bill
+past 10 transactions please,transaction_history
+show my account balance,check_balance
+dth payment 1000 please,pay_bill
+what is my current account balance,check_balance
+transfer 500 rupees kumar,send_money
+clear gas bill,pay_bill
+i want to know my balance,check_balance
+sent 5 to sanjay,send_money
+please pay 5 rupees to ram,send_money
+transaction list,transaction_history
+i'd like to transfer 500 to rajesh,send_money
+i'd like to transfer 300 to rahul,send_money
+my current balance,check_balance
+list my transactions,transaction_history
+electricity bill of 25 rupees,pay_bill
+show me my balance,check_balance
+show my recent payments,transaction_history
