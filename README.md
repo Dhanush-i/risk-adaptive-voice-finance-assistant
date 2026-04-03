@@ -89,10 +89,5 @@ This automatically spins up both the FastAPI backend and the Vite frontend. Navi
 
 ---
 
-## 💼 Academic Research
-This project was developed alongside academic research validating Risk-Adaptive frameworks in Voice Biometrics. 
-- You can read the generated **IEEE Format Paper** in the root directory: `IEEE_Paper_VoicePay.docx`.
-- The simulation data and chart generator scripts can be found in `ml/scripts/benchmark_sim.py` and `ml/scripts/generate_paper_plots.py`.
-
 ## 📝 License
 Distributed under the MIT License.
