@@ -20,12 +20,12 @@ torchaudio>=2.9.0
 
 # --- ML: Intent Classification ---
 # torch already installed
-numpy==1.26.4
+numpy
 
 # --- ML: Fraud Detection ---
-scikit-learn==1.5.1
-pandas==2.2.2
-joblib==1.4.2
+scikit-learn
+pandas
+joblib
 
 # --- Payments ---
 razorpay==1.4.2
