@@ -15,17 +15,17 @@ openai-whisper
 
 # --- ML: Speaker Verification ---
 speechbrain==1.0.0
-torch>=2.9.0
-torchaudio>=2.9.0
+torch==2.2.2
+torchaudio==2.2.2
 
 # --- ML: Intent Classification ---
 # torch already installed
-numpy
+numpy==1.26.4
 
 # --- ML: Fraud Detection ---
-scikit-learn
-pandas
-joblib
+scikit-learn==1.5.1
+pandas==2.2.2
+joblib==1.4.2
 
 # --- Payments ---
 razorpay==1.4.2
