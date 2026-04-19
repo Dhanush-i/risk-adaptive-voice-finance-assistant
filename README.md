@@ -99,14 +99,6 @@ The entire pipeline executes in approximately **1.87 seconds** on standard CPU h
 
 ---
 
-## 📑 Documentation
-
-Full project documentation is available in the `docs/` folder:
-- [IEEE Research Paper](docs/IEEE_Research_Paper.md)
-- [PCL Project Report (Full)](docs/PCL_Project_Report.md)
-
----
-
 ## 👥 Authors
 - **Dhanush I**
 - [Collaborators]
