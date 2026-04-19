@@ -8,11 +8,13 @@ import os
 import uuid
 import shutil
 from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from backend.app.db.database import get_db
 from backend.app.db.models import User, SpeakerProfile
 from backend.app.services.pipeline import PipelineOrchestrator
+from backend.app.utils.audio_utils import convert_to_wav
 
 router = APIRouter(prefix="/voice", tags=["Voice Processing"])
 
@@ -21,6 +23,17 @@ def get_app_state():
     """Get app state from main module."""
     from backend.app.main import app_state
     return app_state
+
+
+def _get_current_user_from_token(token: str, db: Session):
+    """Extract user from JWT token. Returns None if no auth configured yet."""
+    try:
+        from backend.app.core.security import decode_access_token
+        payload = decode_access_token(token)
+        user = db.query(User).filter_by(username=payload["username"]).first()
+        return user
+    except Exception:
+        return None
 
 
 @router.post("/process")
@@ -46,21 +59,26 @@ async def process_voice_command(
     if not user.is_active:
         raise HTTPException(status_code=403, detail="User account is disabled")
 
-    # Save uploaded audio to temp file
+    # Save uploaded audio to temp file (browser sends WebM)
     audio_dir = "storage/audio"
     os.makedirs(audio_dir, exist_ok=True)
-    audio_filename = f"{user_id}_{uuid.uuid4().hex[:8]}.wav"
-    audio_path = os.path.join(audio_dir, audio_filename)
+    unique_id = uuid.uuid4().hex[:8]
+    webm_path = os.path.join(audio_dir, f"{user_id}_{unique_id}.webm")
+    wav_path = os.path.join(audio_dir, f"{user_id}_{unique_id}.wav")
 
     try:
-        with open(audio_path, "wb") as f:
+        # Save raw upload
+        with open(webm_path, "wb") as f:
             content = await audio.read()
             f.write(content)
+
+        # Convert to WAV for Whisper/SpeechBrain
+        convert_to_wav(webm_path, wav_path)
 
         # Run pipeline
         orchestrator = PipelineOrchestrator(app_state)
         result = await orchestrator.process_voice_command(
-            audio_path=audio_path,
+            audio_path=wav_path,
             user_id=user_id,
             db_user_id=user.id,
             db=db,
@@ -71,8 +89,85 @@ async def process_voice_command(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Pipeline error: {str(e)}")
     finally:
-        # Cleanup temp audio file (keep for debugging in dev)
-        pass
+        # Cleanup temp audio files
+        for path in [webm_path, wav_path]:
+            try:
+                if os.path.exists(path):
+                    os.remove(path)
+            except OSError:
+                pass
+
+
+@router.post("/process-stream")
+async def process_voice_command_stream(
+    audio: UploadFile = File(...),
+    user_id: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    """
+    Process a voice command with Server-Sent Events (SSE) streaming.
+    Each pipeline stage result is emitted as it completes.
+    """
+    app_state = get_app_state()
+
+    # Validate user
+    user = db.query(User).filter_by(username=user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail=f"User '{user_id}' not found")
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="User account is disabled")
+
+    # Save + convert audio
+    audio_dir = "storage/audio"
+    os.makedirs(audio_dir, exist_ok=True)
+    unique_id = uuid.uuid4().hex[:8]
+    webm_path = os.path.join(audio_dir, f"{user_id}_{unique_id}.webm")
+    wav_path = os.path.join(audio_dir, f"{user_id}_{unique_id}.wav")
+
+    with open(webm_path, "wb") as f:
+        content = await audio.read()
+        f.write(content)
+
+    try:
+        convert_to_wav(webm_path, wav_path)
+    except Exception as e:
+        # Cleanup on conversion failure
+        for p in [webm_path, wav_path]:
+            try:
+                if os.path.exists(p):
+                    os.remove(p)
+            except OSError:
+                pass
+        raise HTTPException(status_code=400, detail=f"Audio conversion failed: {e}")
+
+    orchestrator = PipelineOrchestrator(app_state)
+
+    async def event_generator():
+        try:
+            async for event in orchestrator.process_voice_command_streaming(
+                audio_path=wav_path,
+                user_id=user_id,
+                db_user_id=user.id,
+                db=db,
+            ):
+                yield event
+        finally:
+            for path in [webm_path, wav_path]:
+                try:
+                    if os.path.exists(path):
+                        os.remove(path)
+                except OSError:
+                    pass
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 @router.post("/process-text")
@@ -131,17 +226,23 @@ async def enroll_speaker(
             detail=f"Need at least 3 audio samples for enrollment. Got {len(audio_files)}."
         )
 
-    # Save audio files
+    # Save and convert audio files
     audio_dir = f"storage/audio/enrollment_{user_id}"
     os.makedirs(audio_dir, exist_ok=True)
 
     audio_paths = []
     for i, audio in enumerate(audio_files):
-        path = os.path.join(audio_dir, f"enroll_{i}.wav")
-        with open(path, "wb") as f:
+        webm_path = os.path.join(audio_dir, f"enroll_{i}.webm")
+        wav_path = os.path.join(audio_dir, f"enroll_{i}.wav")
+        with open(webm_path, "wb") as f:
             content = await audio.read()
             f.write(content)
-        audio_paths.append(path)
+        try:
+            convert_to_wav(webm_path, wav_path)
+            audio_paths.append(wav_path)
+        except Exception:
+            # If conversion fails, try using raw file directly
+            audio_paths.append(webm_path)
 
     try:
         # Load SV model if needed
@@ -152,7 +253,7 @@ async def enroll_speaker(
             app_state["speaker_verification"] = sv
 
         sv = app_state["speaker_verification"]
-        result = sv.enroll_speaker(user_id, audio_paths)
+        result = sv.enroll_speaker(user_id, audio_paths, authenticated_user_id=user_id)
 
         # Update speaker profile in DB
         profile = db.query(SpeakerProfile).filter_by(user_id=user.id).first()
@@ -206,16 +307,19 @@ async def verify_speaker_step_up(
     if not user:
         raise HTTPException(status_code=404, detail=f"User '{user_id}' not found")
 
-    # Save audio temporarily
+    # Save and convert audio
     audio_dir = "storage/audio/verify_stepup"
     os.makedirs(audio_dir, exist_ok=True)
-    audio_filename = f"verify_{user_id}_{uuid.uuid4().hex[:8]}.wav"
-    audio_path = os.path.join(audio_dir, audio_filename)
+    unique_id = uuid.uuid4().hex[:8]
+    webm_path = os.path.join(audio_dir, f"verify_{user_id}_{unique_id}.webm")
+    wav_path = os.path.join(audio_dir, f"verify_{user_id}_{unique_id}.wav")
 
     try:
-        with open(audio_path, "wb") as f:
+        with open(webm_path, "wb") as f:
             content = await audio.read()
             f.write(content)
+
+        convert_to_wav(webm_path, wav_path)
 
         # Load SV model if needed
         if app_state.get("speaker_verification") is None:
@@ -225,12 +329,16 @@ async def verify_speaker_step_up(
             app_state["speaker_verification"] = sv
 
         sv = app_state["speaker_verification"]
-        result = sv.verify_speaker(user_id, audio_path)
+        result = sv.verify_speaker(user_id, wav_path, authenticated_user_id=user_id)
 
         return result
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Verification failed: {str(e)}")
     finally:
-        if os.path.exists(audio_path):
-            os.remove(audio_path)
+        for path in [webm_path, wav_path]:
+            try:
+                if os.path.exists(path):
+                    os.remove(path)
+            except OSError:
+                pass

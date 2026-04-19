@@ -24,13 +24,9 @@ class AppConfig:
         with open(config_path, "r") as f:
             self._config = yaml.safe_load(f)
 
-        # Override Razorpay keys from environment
-        self._config["razorpay"]["key_id"] = os.getenv(
-            "RAZORPAY_KEY_ID", self._config["razorpay"]["key_id"]
-        )
-        self._config["razorpay"]["key_secret"] = os.getenv(
-            "RAZORPAY_KEY_SECRET", self._config["razorpay"]["key_secret"]
-        )
+        # Razorpay keys loaded EXCLUSIVELY from environment variables
+        self._razorpay_key_id = os.getenv("RAZORPAY_KEY_ID", "")
+        self._razorpay_key_secret = os.getenv("RAZORPAY_KEY_SECRET", "")
 
         # Override database URL from environment
         db_url = os.getenv("DATABASE_URL")
@@ -78,11 +74,11 @@ class AppConfig:
 
     @property
     def razorpay_key_id(self) -> str:
-        return self._config["razorpay"]["key_id"]
+        return self._razorpay_key_id
 
     @property
     def razorpay_key_secret(self) -> str:
-        return self._config["razorpay"]["key_secret"]
+        return self._razorpay_key_secret
 
     @property
     def razorpay_currency(self) -> str:
@@ -91,6 +87,11 @@ class AppConfig:
     @property
     def razorpay_max_amount_paise(self) -> int:
         return self._config["razorpay"]["max_amount_paise"]
+
+    # --- JWT ---
+    @property
+    def jwt_secret_key(self) -> str:
+        return os.getenv("JWT_SECRET_KEY", "voicepay-dev-secret-change-in-production")
 
     # --- Database ---
     @property

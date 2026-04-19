@@ -4,7 +4,7 @@
 
 project:
   name: "Risk-Adaptive Voice-Based Financial Assistant"
-  version: "1.0.0"
+  version: "2.0.0"
   seed: 42
 
 # --- Speech-to-Text (Whisper) ---
@@ -18,11 +18,12 @@ stt:
 # --- Speaker Verification (ECAPA-TDNN) ---
 speaker_verification:
   model_source: "speechbrain/spkrec-ecapa-voxceleb"
-  similarity_threshold: 0.45
+  similarity_threshold: 0.30
   min_enrollment_samples: 3
   embedding_dim: 192
   device: "cpu"
   profiles_dir: "storage/speaker_profiles"
+  liveness_hfe_threshold: 0.015  # Calibrated via ml/scripts/calibrate_liveness.py
 
 # --- Intent Classification (LSTM) ---
 intent_classification:
@@ -31,6 +32,7 @@ intent_classification:
     - check_balance
     - transaction_history
     - pay_bill
+    - out_of_scope
   vocab_size: 2000
   embedding_dim: 128
   hidden_dim: 256
@@ -43,7 +45,7 @@ intent_classification:
   model_path: "ml/models/intent_model.pth"
   vocab_path: "ml/models/vocab.json"
   dataset_path: "ml/data/intent_dataset.csv"
-  num_samples: 2000
+  num_samples: 2500
 
 # --- Fraud Detection (IsolationForest + RandomForest) ---
 fraud_detection:
@@ -56,9 +58,9 @@ fraud_detection:
     max_depth: 10
     random_state: 42
   risk_thresholds:
-    low_max: 0.3
-    medium_max: 0.7
-    # above 0.7 = High
+    low_max: 0.4
+    medium_max: 0.8
+    # above 0.8 = High
   model_path: "ml/models/fraud_model.joblib"
   scaler_path: "ml/models/fraud_scaler.joblib"
   dataset_path: "ml/data/fraud_dataset.csv"
@@ -78,10 +80,8 @@ auth:
       description: "Transaction blocked, alert sent"
   pin_hash_rounds: 12
 
-# --- Razorpay ---
+# --- Razorpay (keys loaded from .env only) ---
 razorpay:
-  key_id: "RAZORPAY_KEY_ID"        # Replace with actual key or use env var
-  key_secret: "RAZORPAY_KEY_SECRET"  # Replace with actual secret or use env var
   currency: "INR"
   payment_capture: 1                 # Auto-capture payments
   max_amount_paise: 100000           # ₹1000 max for safety (in paise)
@@ -104,3 +104,4 @@ api:
   port: 8000
   cors_origins:
     - "*"
+

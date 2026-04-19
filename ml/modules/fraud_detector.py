@@ -31,6 +31,8 @@ class FraudDetector:
         "is_new_recipient", "failed_auth_attempts",
     ]
 
+    PROFILES_DIR = "storage/user_profiles"
+
     def __init__(self, config_path: str = "architecture/config.yaml"):
         with open(config_path, "r") as f:
             config = yaml.safe_load(f)
@@ -41,19 +43,41 @@ class FraudDetector:
         self.thresholds = fd_config["risk_thresholds"]
         self.model_path = fd_config["model_path"]
         self.scaler_path = fd_config["scaler_path"]
+        self.config_path = config_path
 
         self.isolation_forest = None
         self.random_forest = None
         self.scaler = None
         
-        # Adaptive tracking
+        # Adaptive tracking — loaded from persistent storage
         self.user_profiles = {}
+        os.makedirs(self.PROFILES_DIR, exist_ok=True)
+
+    def _auto_train(self) -> None:
+        """Auto-trigger model training when model files don't exist."""
+        print("[Fraud] Model not found — auto-training...")
+        import sys
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+        # Generate dataset if needed
+        dataset_path = "ml/data/fraud_dataset.csv"
+        if not os.path.exists(dataset_path):
+            print("[Fraud] Dataset not found — generating...")
+            from ml.scripts.generate_fraud_dataset import generate_dataset
+            generate_dataset()
+
+        # Train the model
+        from ml.scripts.train_fraud_model import train
+        train()
 
     def load_model(self) -> None:
-        """Load trained models and scaler from disk."""
+        """Load trained models and scaler from disk. Auto-trains if missing."""
+        if not os.path.exists(self.model_path):
+            self._auto_train()
+
         if not os.path.exists(self.model_path):
             raise FileNotFoundError(
-                f"[Fraud] Model not found: {self.model_path}. Train it first!"
+                f"[Fraud] Model still not found after auto-training: {self.model_path}"
             )
 
         models = joblib.load(self.model_path)
@@ -84,8 +108,8 @@ class FraudDetector:
         is_new = transaction.get("is_new_recipient", 0)
         failed = transaction.get("failed_auth_attempts", 0)
 
-        # High amount deviation
-        if avg > 0 and amount > avg * 3:
+        # High amount deviation — only flag truly extreme amounts
+        if avg > 0 and amount > avg * 5:
             flags.append(f"HIGH_AMOUNT_DEVIATION: ₹{amount:.0f} vs avg ₹{avg:.0f}")
 
         # Unusual hour (midnight to 5am)
@@ -93,15 +117,15 @@ class FraudDetector:
             flags.append(f"UNUSUAL_HOUR: {hour}:00")
 
         # High frequency
-        if freq > 10:
+        if freq > 15:
             flags.append(f"HIGH_FREQUENCY: {freq} transactions in 24h")
 
-        # Very recent last transaction
-        if time_since < 5:
-            flags.append(f"RAPID_TRANSACTION: {time_since} min since last")
+        # Rapid transactions — only flag if 5+ payments in quick succession
+        if freq >= 5 and time_since < 2:
+            flags.append(f"RAPID_TRANSACTION: {freq} payments, {time_since} min since last")
 
         # New recipient with high amount
-        if is_new and avg > 0 and amount > avg * 2:
+        if is_new and avg > 0 and amount > avg * 3:
             flags.append(f"NEW_RECIPIENT_HIGH_AMOUNT: ₹{amount:.0f} to new recipient")
 
         # Multiple failed auth attempts
@@ -175,17 +199,59 @@ class FraudDetector:
         """Predict fraud risk for multiple transactions."""
         return [self.predict(t) for t in transactions]
 
+    def _get_profile_path(self, user_id: str) -> str:
+        """Get the JSON file path for a user's adaptive profile."""
+        return os.path.join(self.PROFILES_DIR, f"{user_id}.json")
+
+    def _load_user_profile(self, user_id: str) -> Optional[Dict[str, Any]]:
+        """Load a persisted user profile from disk."""
+        if user_id in self.user_profiles:
+            return self.user_profiles[user_id]
+
+        path = self._get_profile_path(user_id)
+        if os.path.exists(path):
+            import json
+            with open(path, "r") as f:
+                profile = json.load(f)
+            self.user_profiles[user_id] = profile
+            return profile
+        return None
+
+    def _save_user_profile(self, user_id: str) -> None:
+        """Persist a user profile to disk as JSON."""
+        profile = self.user_profiles.get(user_id)
+        if profile is None:
+            return
+        import json
+        path = self._get_profile_path(user_id)
+        with open(path, "w") as f:
+            json.dump(profile, f, indent=2)
+
+    def get_adaptive_features(self, user_id: str) -> Dict[str, float]:
+        """
+        Get dynamically adjusted features from the user's adaptive profile.
+        Returns avg_transaction_amount and amount_deviation baseline if available.
+        """
+        profile = self._load_user_profile(user_id)
+        if profile and profile.get("transaction_history"):
+            history = profile["transaction_history"]
+            avg = sum(history) / len(history)
+            return {"avg_transaction_amount": avg}
+        return {}
+
     def learn(self, transaction: Dict[str, Any], user_id: str = "demo_user") -> None:
         """
-        Adaptive Learning: Update the 'Normal User Profile' for this user
+        Adaptive Learning: Update and persist the user's transaction profile
         with a newly verified legitimate transaction.
         """
         if user_id not in self.user_profiles:
-            self.user_profiles[user_id] = {
-                "transaction_history": [],
-                "avg_amount": float(transaction.get("amount", 0)),
-                "total_transactions": 0
-            }
+            existing = self._load_user_profile(user_id)
+            if existing is None:
+                self.user_profiles[user_id] = {
+                    "transaction_history": [],
+                    "avg_amount": float(transaction.get("amount", 0)),
+                    "total_transactions": 0,
+                }
             
         profile = self.user_profiles[user_id]
         
@@ -201,7 +267,10 @@ class FraudDetector:
         profile["total_transactions"] += 1
         profile["avg_amount"] = sum(profile["transaction_history"]) / len(profile["transaction_history"])
         
-        print(f"[Fraud] Adaptive Learning context updated for {user_id}.")
+        # Persist to disk
+        self._save_user_profile(user_id)
+        
+        print(f"[Fraud] Adaptive profile updated and saved for {user_id}.")
         print(f"        New Baseline Avg: ₹{profile['avg_amount']:.2f} over {profile['total_transactions']} txns.")
 
 

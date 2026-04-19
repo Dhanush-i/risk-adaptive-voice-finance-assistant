@@ -9,8 +9,8 @@ Risk Tiers:
   - High → Block transaction + Alert (no payment initiated)
 
 Speaker Verification Rules:
-  - SV similarity < 0.35 → BLOCK (likely impostor)
-  - SV similarity < threshold (0.45) but >= 0.35 → STEP-UP (uncertain, re-verify)
+  - SV similarity < 0.20 → BLOCK (likely impostor)
+  - SV similarity < threshold (0.30) but >= 0.20 → STEP-UP (uncertain, re-verify)
   - SV similarity >= threshold → PASS (verified speaker)
 
 Input:  Fraud detection output + speaker verification output
@@ -25,7 +25,8 @@ class AuthLogic:
     """Risk-adaptive authentication policy engine."""
 
     # Hard block threshold — below this similarity, the voice is definitely wrong
-    SV_HARD_BLOCK_THRESHOLD = 0.35
+    # Lowered from 0.35 to 0.20 to accommodate noisy laptop/phone mics
+    SV_HARD_BLOCK_THRESHOLD = 0.15
 
     def __init__(self, config_path: str = "architecture/config.yaml"):
         with open(config_path, "r") as f:
@@ -97,10 +98,10 @@ class AuthLogic:
                 anomaly_flags.insert(0, f"SV_MISMATCH ({similarity_score:.2f})")
 
         if not speaker_verified and sv_not_enrolled:
-            # No enrollment or SV error — bump risk to Medium but don't block
-            if risk_tier == "Low":
-                risk_tier = "Medium"
-                risk_score = max(risk_score, 0.35)
+            # Not enrolled — can't do voice verification at all.
+            # Keep current risk tier; PIN-only auth is enough.
+            # Do NOT bump to Medium (which triggers step_up they can't pass).
+            pass
 
         # --- Risk-based Auth Decision ---
         tier_config = self.risk_tiers.get(risk_tier.lower(), self.risk_tiers["high"])

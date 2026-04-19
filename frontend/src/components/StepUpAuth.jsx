@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
 import { verifySpeaker } from '../utils/api';
+import { VoiceLines } from '../utils/voiceFeedback';
 
 const MAX_ATTEMPTS = 3;
 
@@ -27,6 +28,7 @@ export default function StepUpAuth({ userId, onSuccess, onCancel }) {
       resetAudio();
 
       if (result.verified) {
+        VoiceLines.stepUpSuccess();
         onSuccess();
       } else {
         const newAttempts = attempts + 1;
@@ -34,6 +36,7 @@ export default function StepUpAuth({ userId, onSuccess, onCancel }) {
 
         if (newAttempts >= MAX_ATTEMPTS) {
           setError(`Voice verification failed ${MAX_ATTEMPTS} times. Transaction cancelled for security.`);
+          VoiceLines.stepUpFailed();
           setTimeout(() => onCancel(), 2500);
         } else {
           setError(

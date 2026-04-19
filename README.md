@@ -1,93 +1,115 @@
-# 🎙️ Risk-Adaptive Voice Finance Assistant
+# Risk-Adaptive Voice-Based Financial Assistant
 
-<div align="center">
-  <img src="paper_assets/fig3_sv_distribution.png" alt="Speaker Verification System Logo Placeholder" width="400">
-  <p>A full-stack financial application leveraging voice biometrics, NLP, and machine learning fraud detection to implement a dynamic, risk-adaptive authentication protocol.</p>
-</div>
+<p align="center">
+  <img src="docs/figures/fig1_system_architecture.png" alt="Architecture" width="800">
+</p>
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
-![React](https://img.shields.io/badge/react-18.x-blue.svg)
-![FastAPI](https://img.shields.io/badge/fastapi-0.100%2B-green.svg)
+## 🚀 Overview
 
----
+The **Risk-Adaptive Voice-Based Financial Assistant** is a secure, hands-free payment ecosystem that integrates multiple state-of-the-art machine learning models to facilitate safe voice-driven transactions. It dynamically adjusts authentication requirements based on a multi-modal risk assessment engine analyzing voice biometrics and behavioral transaction patterns.
 
-## 🌟 Overview
+### Key Capabilities
 
-The **Risk-Adaptive Voice Finance Assistant** shifts away from static passwords to a dynamic trust model based on the **A.N.T. (Analysis, Neutralization, Transaction)** architecture. 
-
-It processes spoken commands, verifies speaker identity using voice biometrics, classifies the intent, assesses behavioral fraud risk, and executes real payments via Razorpay—all gated by an incredibly polished, dynamic authentication policy.
-
-### 🧠 Core Deep Learning Modules
-- **Speech-To-Text (STT):** High-accuracy transcription using OpenAI's Whisper model (`medium` variant).
-- **Intent Classification:** Custom PyTorch Bidirectional LSTM model achieving a **99.5% F1-score** for financial commands (e.g., "send money", "check balance").
-- **Voice Biometrics:** Robust speaker verification using the `ECAPA-TDNN` architecture with cosine similarity and continuous High-Frequency Energy (HFE) liveness detection to prevent replay attacks.
-- **Behavioral Fraud Detection:** An ensemble of Isolation Forest (unsupervised anomaly detection) and Random Forest (supervised classification) that continuously adapts to user spending habits via an online learning mechanism.
+*   **🎙️ Voice-First Interaction:** Fully hands-free operation with natural language processing and comprehensive text-to-speech feedback (30+ contextual voice lines).
+*   **🧠 A.N.T. Architecture:** Three-layer (Perception, Intelligence, Action) architecture for robust and scalable processing.
+*   **🛡️ Risk-Adaptive Security:** A dynamic 3-tier security model (Low/Medium/High risk) that escalates authentication based on risk scores.
+*   **🔍 Multi-Modal ML Pipeline:** Integrates Whisper (STT), ECAPA-TDNN (Speaker Verification), BiLSTM (Intent), and IF+RF Ensemble (Fraud Detection).
+*   **📱 Cross-Platform:** High-parity experience across React Web and React Native (Expo) Mobile applications.
+*   **💳 Real Payments:** Integration with Razorpay for real-time INR transaction processing and verification.
 
 ---
 
-## 📸 System Showcase
+## 🛠️ The ML Pipeline
 
-| Intent Classifier Accuracy | Pipeline Latency Benchmarks |
-| :---: | :---: |
-| <img src="paper_assets/fig1_confusion_matrix.png" width="350"> | <img src="paper_assets/fig2_latency_breakdown.png" width="350"> |
-| *Confusion matrix on 400 hold-out synthetic financial queries (99.5% Acc).* | *Log-scale latency distribution across the backend A.N.T. pipeline.* |
+<p align="center">
+  <img src="docs/figures/fig2_pipeline_flow.png" alt="Pipeline Flow" width="800">
+</p>
 
-*Note: Replace UI mockups here with actual application screenshots if desired!*
+The system processes every voice command through a 5-stage pipeline:
 
----
-
-## 🛡️ The Risk-Adaptive Auth Policy
-
-Rather than a binary "accept/reject" system, the model generates a composite risk score to assign one of three Authentication Tiers:
-| Risk Tier | Conditions Triggered | Auth Requirement |
-| :--- | :--- | :--- |
-| 🟢 **Low Risk** | High Voice Match + Low Fraud Score | **PIN Only** |
-| 🟡 **Medium Risk** | Borderline Voice Match *OR* Slight Anomaly | **Step-Up (Voice + PIN)** |
-| 🔴 **High Risk** | Replay Attack *OR* Voice Mismatch | **Hard Block** |
+1.  **Speech-to-Text (Whisper):** Converts raw audio to text with high accuracy (Whisper medium model).
+2.  **Speaker Verification (ECAPA-TDNN):** Verifies the speaker's biometric identity using 192-dim embeddings.
+3.  **Intent Classification (BiLSTM):** Understands financial intents (send, check balance, etc.) and extracts entities (amount, recipient).
+4.  **Behavioral Fraud Detection:** Evaluates transaction risk using an Isolation Forest and Random Forest weighted ensemble.
+5.  **Risk-Adaptive Auth Engine:** Determines if the transaction requires a simple PIN, a voice re-verification (step-up), or must be blocked.
 
 ---
 
-## 🛠️ Tech Stack
+## 📊 Performance Benchmarks
 
-| Component | Technology |
-|-----------|------------|
-| Backend | FastAPI + Python 3.11 |
-| Frontend | Vite + React + Vanilla CSS (Glassmorphism UI) |
-| STT | OpenAI Whisper (`medium`) |
-| Speaker Verification | SpeechBrain ECAPA-TDNN |
-| Intent Classification | Bidirectional LSTM (PyTorch) |
-| Fraud Detection | Isolation Forest + Random Forest (scikit-learn) |
-| Payments Gateway | Razorpay (Orders API + Checkout.js) |
-| Database | SQLite + SQLAlchemy |
+### Intent Classification
+| Metric | Value |
+|--------|-------|
+| Accuracy | 96.2% |
+| F1-Score | 95.9% |
 
----
+<p align="center">
+  <img src="docs/figures/fig5_confusion_matrix.png" alt="Confusion Matrix" width="400">
+</p>
 
-## 🚀 Quick Start
+### Pipeline Latency
+The entire pipeline executes in approximately **1.87 seconds** on standard CPU hardware.
 
-### 1. Setup (One-Command)
-```bash
-git clone https://github.com/Dhanush-i/risk-adaptive-voice-finance-assistant.git
-cd risk-adaptive-voice-finance-assistant
-python scripts/setup.py
-```
-> **What this does:** Installs all Python and NPM dependencies, generates the synthetic ML datasets, trains the BiLSTM intent model and Fraud Ensemble models, and initializes the SQlite DB.
-
-### 2. Configure Razorpay (Optional)
-Edit the `.env` file with your test keys to enable real payment processing:
-```env
-RAZORPAY_KEY_ID=rzp_test_YOURKEY
-RAZORPAY_KEY_SECRET=YOURSECRET
-```
-*(If you leave this out, the app will still work but will mock the payment execution phase).*
-
-### 3. Run the Application
-```bash
-python scripts/run.py
-```
-This automatically spins up both the FastAPI backend and the Vite frontend. Navigate to **http://localhost:5173**.
+<p align="center">
+  <img src="docs/figures/fig7_latency_breakdown.png" alt="Latency Breakdown" width="600">
+</p>
 
 ---
 
-## 📝 License
-Distributed under the MIT License.
+## 🏗️ Architecture (A.N.T. Three-Layer)
+
+1.  **Perception Layer:** Raw sensory processing (Whisper STT + ECAPA-TDNN Speaker Verification).
+2.  **Intelligence Layer:** Semantic & Behavioral analysis (BiLSTM Intent classification + IF/RF Fraud detection).
+3.  **Action Layer:** Policy enforcement (Risk-Adaptive Auth Engine + Razorpay Payment Gateway).
+
+---
+
+## 💻 Tech Stack
+
+*   **Backend:** FastAPI (Python), SQLAlchemy, SQLite.
+*   **ML Engines:** PyTorch, SpeechBrain, OpenAI Whisper, Scikit-learn.
+*   **Web:** React 19, CSS3 (Glassmorphism), Vite.
+*   **Mobile:** React Native (Expo SDK 54).
+*   **Payments:** Razorpay API.
+
+---
+
+## 📦 Installation & Setup
+
+### Prerequisites
+- Python 3.10+
+- Node.js 18+
+- Expo Go (for mobile testing)
+
+### Backend Setup
+1. Clone the repository
+2. Install dependencies: `pip install -r requirements.txt`
+3. Initialize database: `python scripts/init_db.py`
+4. Start the server: `python scripts/run.py`
+
+### Frontend Setup
+1. `cd frontend`
+2. `npm install`
+3. `npm run dev`
+
+### Mobile Setup
+1. `cd mobile`
+2. `npm install`
+3. `npx expo start`
+
+---
+
+## 📑 Documentation
+
+Full project documentation is available in the `docs/` folder:
+- [IEEE Research Paper](docs/IEEE_Research_Paper.md)
+- [PCL Project Report (Full)](docs/PCL_Project_Report.md)
+
+---
+
+## 👥 Authors
+- **Dhanush I**
+- [Collaborators]
+
+---
+© 2026 Risk-Adaptive Voice Assistant Project. All rights reserved.

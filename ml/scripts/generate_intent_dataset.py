@@ -1,14 +1,11 @@
 """
-Intent Dataset Generator (v2 — Expanded)
-==========================================
-Generates synthetic financial command dataset for intent classification training.
-Includes Whisper-like transcription artifacts, Indian English patterns, and augmentation.
-
-Categories:
-  - send_money: "transfer 500 to rahul", "send ₹100 to priya", etc.
-  - check_balance: "what's my balance", "show account balance", etc.
-  - transaction_history: "show last 5 transactions", "recent payments", etc.
-  - pay_bill: "pay electricity bill", "pay ₹200 for phone recharge", etc.
+Intent Dataset Generator (v3 — Augmented + Out-of-Scope)
+==========================================================
+Generates financial command dataset with:
+  - 5 intent classes: send_money, check_balance, transaction_history, pay_bill, out_of_scope
+  - Back-translation augmentation (English ↔ Hindi finance terms)
+  - Whisper transcription artifacts
+  - 500 samples per class
 
 Output: CSV file at ml/data/intent_dataset.csv
 """
@@ -25,7 +22,7 @@ def load_config(config_path: str = "architecture/config.yaml") -> dict:
         return yaml.safe_load(f)
 
 
-# --- Template Definitions (Expanded) ---
+# --- Template Definitions ---
 
 SEND_MONEY_TEMPLATES = [
     "send {amount} rupees to {name}",
@@ -53,7 +50,6 @@ SEND_MONEY_TEMPLATES = [
     "could you send {amount} to {name}",
     "payment of {amount} to {name} please",
     "transfer {amount} rupees to {name}'s account",
-    # Indian English / colloquial patterns
     "send {amount} to {name} please",
     "{name} ko {amount} rupees bhejo",
     "pay {amount} rupees {name} ko",
@@ -72,7 +68,7 @@ SEND_MONEY_TEMPLATES = [
     "forward {amount} to {name}",
     "move {amount} to {name}'s account",
     "process payment of {amount} to {name}",
-    # Whisper transcription artifacts (these come from real Whisper output)
+    # Whisper transcription artifacts
     "send {amount} rupee to {name}",
     "transfer {amount} rupes to {name}",
     "please send {amount} rupee's to {name}",
@@ -106,7 +102,6 @@ CHECK_BALANCE_TEMPLATES = [
     "what's left in my account",
     "remaining balance",
     "available balance please",
-    # Additional patterns
     "how much balance do i have",
     "tell me the balance",
     "what's my remaining balance",
@@ -156,7 +151,6 @@ TRANSACTION_HISTORY_TEMPLATES = [
     "what transactions did i make",
     "show all recent transactions",
     "i want to see my transactions",
-    # Additional patterns
     "show my previous transactions",
     "show transaction history",
     "recent transaction list",
@@ -200,7 +194,6 @@ PAY_BILL_TEMPLATES = [
     "make payment for {bill_type} {amount} rupees",
     "pay {amount} rs for my {bill_type}",
     "{bill_type} payment {amount} please",
-    # Additional patterns
     "pay the {bill_type} bill",
     "settle {bill_type} dues of {amount}",
     "i want to pay {bill_type} bill of {amount}",
@@ -218,7 +211,55 @@ PAY_BILL_TEMPLATES = [
     "{bill_type} bill pay {amount}",
 ]
 
-# --- Entity Values (Expanded) ---
+OUT_OF_SCOPE_TEMPLATES = [
+    "hello there",
+    "hi how are you",
+    "good morning",
+    "what's the weather like today",
+    "tell me a joke",
+    "who is the prime minister of india",
+    "what time is it",
+    "play some music",
+    "set an alarm for 7 am",
+    "remind me to buy groceries",
+    "what is the meaning of life",
+    "calculate 25 times 43",
+    "search for flights to delhi",
+    "book a cab to the airport",
+    "order food from swiggy",
+    "translate hello to hindi",
+    "open youtube",
+    "read me the news",
+    "what is bitcoin price today",
+    "how to make chai",
+    "help me with homework",
+    "write an email to my boss",
+    "turn on the lights",
+    "call mom",
+    "navigate to nearest hospital",
+    "this is a test sentence",
+    "random words here nothing",
+    "i am just testing this app",
+    "blah blah blah",
+    "hmm let me think",
+    "okay thanks bye",
+    "never mind forget it",
+    "the quick brown fox jumps",
+    "what can you do",
+    "are you an ai",
+    "tell me about yourself",
+    "do you know any recipes",
+    "how tall is mount everest",
+    "when was india independent",
+    "who won the cricket match",
+    "subscribe to my channel",
+    "like and share this video",
+    "download the app now",
+    "click the link below",
+    "testing one two three",
+]
+
+# --- Entity Values ---
 
 NAMES = [
     "rahul", "priya", "amit", "sneha", "vikram", "ananya", "rohan", "deepa",
@@ -238,9 +279,28 @@ BILL_TYPES = [
 
 HISTORY_COUNTS = [3, 5, 7, 10, 15, 20]
 
+# --- Back-Translation Substitution Table ---
+BACK_TRANSLATION_TABLE = {
+    "send": ["bhejo", "bhej do", "transfer karo"],
+    "money": ["paisa", "rupees", "paise"],
+    "transfer": ["bhejo", "send karo", "transfer karo"],
+    "balance": ["balance", "paisa kitna", "kitna hai"],
+    "pay": ["pay karo", "bharo", "de do"],
+    "check": ["dekho", "check karo", "batao"],
+    "account": ["khata", "account"],
+    "bill": ["bill", "bijli bill", "phone bill"],
+    "show": ["dikhao", "batao", "show karo"],
+    "please": ["kripya", "please"],
+    "rupees": ["rupaye", "rs", "rupee"],
+    "transactions": ["transactions", "lenden"],
+    "history": ["history", "purana record"],
+    "payment": ["payment", "bhugtan"],
+    "recent": ["haal ka", "recent", "abhi ka"],
+}
+
 
 def augment_text(text: str) -> str:
-    """Apply random augmentation to text: filler words, word drops, minor typos."""
+    """Apply random augmentation: filler words, word drops, minor typos."""
     words = text.split()
 
     # 20% chance: add filler word
@@ -258,6 +318,21 @@ def augment_text(text: str) -> str:
     return " ".join(words)
 
 
+def back_translate(text: str) -> str:
+    """
+    Heuristic back-translation: randomly substitute some English words
+    with their Hindi/colloquial equivalents and vice versa.
+    """
+    words = text.split()
+    result = []
+    for w in words:
+        if w in BACK_TRANSLATION_TABLE and random.random() < 0.3:
+            result.append(random.choice(BACK_TRANSLATION_TABLE[w]))
+        else:
+            result.append(w)
+    return " ".join(result)
+
+
 def generate_send_money(num_samples: int) -> List[Tuple[str, str]]:
     samples = []
     for _ in range(num_samples):
@@ -265,8 +340,11 @@ def generate_send_money(num_samples: int) -> List[Tuple[str, str]]:
         name = random.choice(NAMES)
         amount = random.choice(AMOUNTS)
         text = template.format(name=name, amount=amount)
-        if random.random() < 0.3:
+        r = random.random()
+        if r < 0.2:
             text = augment_text(text)
+        elif r < 0.35:
+            text = back_translate(text)
         samples.append((text, "send_money"))
     return samples
 
@@ -275,8 +353,11 @@ def generate_check_balance(num_samples: int) -> List[Tuple[str, str]]:
     samples = []
     for _ in range(num_samples):
         text = random.choice(CHECK_BALANCE_TEMPLATES)
-        if random.random() < 0.3:
+        r = random.random()
+        if r < 0.2:
             text = augment_text(text)
+        elif r < 0.35:
+            text = back_translate(text)
         samples.append((text, "check_balance"))
     return samples
 
@@ -290,8 +371,11 @@ def generate_transaction_history(num_samples: int) -> List[Tuple[str, str]]:
             text = template.format(n=n)
         else:
             text = template
-        if random.random() < 0.3:
+        r = random.random()
+        if r < 0.2:
             text = augment_text(text)
+        elif r < 0.35:
+            text = back_translate(text)
         samples.append((text, "transaction_history"))
     return samples
 
@@ -303,23 +387,45 @@ def generate_pay_bill(num_samples: int) -> List[Tuple[str, str]]:
         bill_type = random.choice(BILL_TYPES)
         amount = random.choice(AMOUNTS)
         text = template.format(bill_type=bill_type, amount=amount)
-        if random.random() < 0.3:
+        r = random.random()
+        if r < 0.2:
             text = augment_text(text)
+        elif r < 0.35:
+            text = back_translate(text)
         samples.append((text, "pay_bill"))
     return samples
 
 
-def generate_dataset(num_samples: int = 2000, output_path: str = "ml/data/intent_dataset.csv") -> str:
+def generate_out_of_scope(num_samples: int) -> List[Tuple[str, str]]:
+    """Generate out-of-scope samples from templates and augmentations."""
+    samples = []
+    for _ in range(num_samples):
+        text = random.choice(OUT_OF_SCOPE_TEMPLATES)
+        if random.random() < 0.3:
+            text = augment_text(text)
+        samples.append((text, "out_of_scope"))
+    return samples
+
+
+def generate_dataset(num_samples: int = 2500, output_path: str = "ml/data/intent_dataset.csv") -> str:
+    """
+    Generate the full intent dataset.
+
+    Args:
+        num_samples: Total number of samples (divided equally among 5 classes).
+        output_path: Output CSV path.
+    """
     random.seed(42)
 
-    samples_per_class = num_samples // 4
-    remainder = num_samples % 4
+    samples_per_class = num_samples // 5
+    remainder = num_samples % 5
 
     all_samples = []
     all_samples.extend(generate_send_money(samples_per_class + (1 if remainder > 0 else 0)))
     all_samples.extend(generate_check_balance(samples_per_class + (1 if remainder > 1 else 0)))
     all_samples.extend(generate_transaction_history(samples_per_class + (1 if remainder > 2 else 0)))
-    all_samples.extend(generate_pay_bill(samples_per_class))
+    all_samples.extend(generate_pay_bill(samples_per_class + (1 if remainder > 3 else 0)))
+    all_samples.extend(generate_out_of_scope(samples_per_class))
 
     random.shuffle(all_samples)
 

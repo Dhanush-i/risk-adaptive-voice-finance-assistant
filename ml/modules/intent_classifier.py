@@ -20,6 +20,8 @@ import torch.nn as nn
 from typing import Dict, Any, List, Optional
 from collections import Counter
 
+from ml.modules.tokenizer import normalize_text
+
 
 class IntentLSTM(nn.Module):
     """LSTM-based intent classification network."""
@@ -63,7 +65,7 @@ class IntentLSTM(nn.Module):
 class IntentClassifier:
     """Intent classification with entity extraction for financial commands."""
 
-    INTENT_LABELS = ["send_money", "check_balance", "transaction_history", "pay_bill"]
+    INTENT_LABELS = ["send_money", "check_balance", "transaction_history", "pay_bill", "out_of_scope"]
 
     # Known entity patterns
     AMOUNT_PATTERN = re.compile(r'(\d+(?:\.\d+)?)\s*(?:rupees?|rs\.?|inr|₹)?', re.IGNORECASE)
@@ -126,11 +128,11 @@ class IntentClassifier:
         print(f"[Intent] Vocabulary size: {len(self.vocab)}")
 
     def tokenize(self, text: str) -> List[int]:
-        """Convert text to token indices using the vocabulary."""
+        """Convert text to token indices using the vocabulary with proper normalization."""
         if self.vocab is None:
             raise RuntimeError("[Intent] Vocabulary not loaded.")
 
-        tokens = text.lower().strip().split()
+        tokens = normalize_text(text).split()
         indices = [self.vocab.get(t, self.vocab.get("<UNK>", 1)) for t in tokens]
 
         # Pad or truncate

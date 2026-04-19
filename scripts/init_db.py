@@ -38,18 +38,22 @@ def init():
     # Seed demo user
     session = SessionLocal()
     try:
+        import bcrypt
+        pin_hash = bcrypt.hashpw("1234".encode("utf-8"), bcrypt.gensalt(rounds=12)).decode("utf-8")
+
         # Check if demo user exists
         existing = session.query(User).filter_by(username="demo_user").first()
         if existing:
-            print(f"[DB] Demo user already exists (id={existing.id})")
+            print(f"[DB] Demo user already exists (id={existing.id}). Updating PIN...")
+            existing.pin_hash = pin_hash
+            existing.password_hash = pin_hash  # Keep in sync
+            session.commit()
         else:
             # Create demo user with PIN "1234"
-            import bcrypt
-            pin_hash = bcrypt.hashpw("1234".encode("utf-8"), bcrypt.gensalt(rounds=12)).decode("utf-8")
-
             demo_user = User(
                 username="demo_user",
                 display_name="Demo User",
+                password_hash=pin_hash,
                 pin_hash=pin_hash,
                 balance=10000.0,
                 is_active=True,
@@ -62,7 +66,7 @@ def init():
             print(f"  Username: demo_user")
             print(f"  Display Name: Demo User")
             print(f"  PIN: 1234 (hashed)")
-            print(f"  Balance: ₹10,000")
+            print(f"  Balance: Rs.10,000")
             print(f"  ID: {demo_user.id}")
 
             # Create empty speaker profile
@@ -90,7 +94,7 @@ def init():
     finally:
         session.close()
 
-    print(f"\n✅ Database initialized at: {config.database_url}")
+    print(f"\n[OK] Database initialized at: {config.database_url}")
 
 
 if __name__ == "__main__":

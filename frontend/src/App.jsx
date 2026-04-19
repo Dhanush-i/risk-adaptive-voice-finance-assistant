@@ -1,507 +1,715 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useAudioRecorder } from './hooks/useAudioRecorder';
 import PipelineVisualizer from './components/PipelineVisualizer';
-import PinPad from './components/PinPad';
 import TransactionHistory from './components/TransactionHistory';
 import VoiceEnrollment from './components/VoiceEnrollment';
-import StepUpAuth from './components/StepUpAuth';
-import BalanceDisplay from './components/BalanceDisplay';
 import ThreatMatrix from './components/ThreatMatrix';
-import { useAudioRecorder } from './hooks/useAudioRecorder';
+import PinPad from './components/PinPad';
+import StepUpAuth from './components/StepUpAuth';
+import LoginPage from './components/LoginPage';
+import ConfirmationModal from './components/ConfirmationModal';
+import ContactsList from './components/ContactsList';
+import QRScannerModal from './components/QRScannerModal';
+import TransactionReceipt from './components/TransactionReceipt';
+import { VoiceLines, speak, stopSpeaking } from './utils/voiceFeedback';
 import {
-  getUser, getBalance, processTextCommand, processVoiceCommand,
-  verifyPin, createOrder, verifyPayment, openRazorpayCheckout,
+  login, register, setAuthToken, clearAuthToken,
+  getBalance,
+  processTextCommand, processVoiceCommand, processVoiceCommandSSE,
+  verifyPin, createOrder,
+  openRazorpayCheckout, verifyPayment,
 } from './utils/api';
-import './index.css';
 
-export default function App() {
-  // Fixed User ID
-  const USER_ID = 'demo_user';
+// --- Sample commands for reviewers ---
+const SAMPLE_COMMANDS = [
+  { text: 'Send 500 rupees to Rahul', icon: '💸' },
+  { text: 'Check my balance', icon: '💰' },
+  { text: 'Show my recent transactions', icon: '📋' },
+  { text: 'Pay electricity bill of 1200', icon: '⚡' },
+  { text: 'Transfer 200 to Priya', icon: '🔄' },
+  { text: 'Open QR scanner', icon: '📷' },
+  { text: 'Send 1000 to Dhanush', icon: '💳' },
+  { text: 'Pay water bill of 800', icon: '💧' },
+];
 
-  // State
-  const [page, setPage] = useState('home');
+function App() {
+  // --- Auth State (persisted to localStorage) ---
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
-  const [balance, setBalance] = useState(0);
 
-  // Voice/Text input
+  // --- UI State ---
+  const [balance, setBalance] = useState(null);
   const [textInput, setTextInput] = useState('');
-  const [processing, setProcessing] = useState(false);
-  const [pipelineResult, setPipelineResult] = useState(null);
-  const [stages, setStages] = useState([]);
-  const [statusMessage, setStatusMessage] = useState('');
+  const [pipelineStages, setPipelineStages] = useState([]);
+  const [pipelineLoading, setPipelineLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('info');
+  const [view, setView] = useState('main'); // main, history, enroll, contacts, receipt
+  const [receiptTxnId, setReceiptTxnId] = useState(null);
+  const [showBalancePopup, setShowBalancePopup] = useState(false);
 
-  // PIN & Payment
-  const [showPin, setShowPin] = useState(false);
+  // --- Transaction Flow ---
+  const [currentTransaction, setCurrentTransaction] = useState(null);
+  const [authDecision, setAuthDecision] = useState(null);
+  const [showPinPad, setShowPinPad] = useState(false);
   const [showStepUp, setShowStepUp] = useState(false);
-  const [showEnrollment, setShowEnrollment] = useState(false);
-  const [showBalance, setShowBalance] = useState(false);
-  const [pinLoading, setPinLoading] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState(null); // null, 'success', 'failed'
-  const [paymentMessage, setPaymentMessage] = useState('');
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showQRScanner, setShowQRScanner] = useState(false);
 
-  // Refresh key for transaction list
-  const [refreshKey, setRefreshKey] = useState(0);
+  // --- Error Recovery ---
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
 
-  // Audio recorder
   const { isRecording, audioBlob, startRecording, stopRecording, resetAudio } = useAudioRecorder();
 
-  const loadUser = useCallback(async () => {
+  // --- Restore session from localStorage on mount ---
+  useEffect(() => {
     try {
-      const u = await getUser(USER_ID);
-      setUser(u);
-      const b = await getBalance(USER_ID);
-      setBalance(b.balance);
-    } catch (e) {
-      console.error('Failed to load user:', e);
+      const savedToken = localStorage.getItem('voicepay_token');
+      const savedUser = localStorage.getItem('voicepay_user');
+      if (savedToken && savedUser) {
+        setAuthToken(savedToken);
+        setUser(JSON.parse(savedUser));
+        setIsAuthenticated(true);
+      }
+    } catch {
+      localStorage.removeItem('voicepay_token');
+      localStorage.removeItem('voicepay_user');
     }
   }, []);
 
-  // Reload data for the fixed user
-  useEffect(() => {
-    loadUser();
-  }, [loadUser, refreshKey]);
-
-  // Auto-process audio when recording stops
-  useEffect(() => {
-    if (audioBlob && !processing) {
-      handleVoiceProcess(audioBlob);
+  // --- Auth Handlers ---
+  const handleLogin = useCallback(async (username, pin, displayName) => {
+    let data;
+    if (displayName) {
+      data = await register(username, displayName, pin);
+    } else {
+      data = await login(username, pin);
     }
-  }, [audioBlob]);
+    // Persist to localStorage so refresh doesn't lose session
+    setAuthToken(data.token);
+    localStorage.setItem('voicepay_token', data.token);
+    localStorage.setItem('voicepay_user', JSON.stringify(data.user));
+    setUser(data.user);
+    setIsAuthenticated(true);
+    VoiceLines.loginSuccess(data.user.display_name || data.user.username);
+    showMsg(`Welcome, ${data.user.display_name}!`, 'success');
+  }, []);
 
-  const resetPipeline = () => {
-    setPipelineResult(null);
-    setStages([]);
-    setStatusMessage('');
-    setShowPin(false);
+  const handleLogout = useCallback(() => {
+    clearAuthToken();
+    localStorage.removeItem('voicepay_token');
+    localStorage.removeItem('voicepay_user');
+    VoiceLines.logout(user?.display_name || 'User');
+    setUser(null);
+    setIsAuthenticated(false);
+    setBalance(null);
+    setPipelineStages([]);
+    setCurrentTransaction(null);
+    setAuthDecision(null);
+    setShowPinPad(false);
     setShowStepUp(false);
-    setShowBalance(false);
-    setPaymentStatus(null);
-    setPaymentMessage('');
-    resetAudio();
+    setShowConfirmation(false);
+    setView('main');
+  }, []);
+
+  // --- Load balance on auth + check enrollment ---
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      getBalance(user.username)
+        .then((data) => setBalance(data.balance))
+        .catch(() => {});
+
+      // Prompt voice enrollment for new accounts
+      if (user.speaker_enrolled === false) {
+        setTimeout(() => {
+          speak('I noticed you haven\'t set up your voice profile yet. Let\'s do that now for secure payments.');
+          setView('enroll');
+        }, 2000);
+      }
+    }
+  }, [isAuthenticated, user]);
+
+  // --- Message Helper ---
+  const showMsg = (text, type = 'info') => {
+    setMessage(text);
+    setMessageType(type);
+    if (type !== 'error') {
+      setTimeout(() => setMessage(''), 5000);
+    }
   };
 
-  // --- Voice Processing ---
-  const handleMicClick = async () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      resetPipeline();
+  // --- Voice Processing with SSE ---
+  useEffect(() => {
+    if (!audioBlob || !isAuthenticated) return;
+
+    const processAudio = async () => {
+      setPipelineLoading(true);
+      setPipelineStages([]);
+      setMessage('');
+      setAuthDecision(null);
+      setCurrentTransaction(null);
+
       try {
-        await startRecording();
-      } catch (e) {
-        setStatusMessage(e.message);
-      }
-    }
-  };
-
-  const handleVoiceProcess = async (blob) => {
-    setProcessing(true);
-    setPage('home');
-    setStatusMessage('Processing voice command...');
-
-    try {
-      const result = await processVoiceCommand(blob, USER_ID);
-      handlePipelineResult(result);
-    } catch (e) {
-      setStatusMessage(`Error: ${e.message}`);
-    }
-    setProcessing(false);
-  };
-
-  // --- Text Processing ---
-  const handleTextSubmit = async (e) => {
-    e.preventDefault();
-    if (!textInput.trim() || processing) return;
-
-    resetPipeline();
-    setProcessing(true);
-    setStatusMessage('Processing command...');
-
-    try {
-      const result = await processTextCommand(textInput, USER_ID);
-      handlePipelineResult(result);
-      setTextInput('');
-    } catch (e) {
-      setStatusMessage(`Error: ${e.message}`);
-    }
-    setProcessing(false);
-  };
-
-  const handlePipelineResult = (result) => {
-    setPipelineResult(result);
-    setStages(result.stages || []);
-
-    const auth = result.auth_decision;
-    const intent = result.stages?.find((s) => s.stage === 'intent_classification')?.data?.intent;
-
-    if (intent === 'transaction_history') {
-      setPage('history');
-      return;
-    }
-
-    if (intent === 'check_balance') {
-      setShowBalance(true);
-      return;
-    }
-
-    if (auth?.proceed) {
-      setStatusMessage('');
-      // Show appropriate auth UI for payment intents
-      if (intent === 'send_money' || intent === 'pay_bill') {
-        if (auth.auth_required === 'step_up') {
-          setShowStepUp(true);
-        } else {
-          setShowPin(true);
-        }
-      } else {
-        setStatusMessage(auth.message);
-      }
-    } else {
-      setStatusMessage(auth?.message || 'Transaction blocked.');
-    }
-  };
-
-  // --- PIN Verification & Payment ---
-  const handlePinSubmit = async (pin) => {
-    setPinLoading(true);
-    try {
-      const pinResult = await verifyPin(USER_ID, pin, pipelineResult.transaction_id);
-      if (!pinResult.success) {
-        throw new Error(pinResult.message || 'Invalid PIN');
-      }
-
-      setShowPin(false);
-      setStatusMessage('PIN verified! Creating payment...');
-
-      // Create Razorpay order
-      try {
-        const order = await createOrder(pipelineResult.transaction_id, USER_ID);
-        setStatusMessage('Opening Razorpay Checkout...');
-
-        // Open Razorpay checkout
-        openRazorpayCheckout(
-          order,
-          async (paymentData) => {
-            // Payment success — verify on server
-            setStatusMessage('Verifying payment...');
-            try {
-              const verification = await verifyPayment(paymentData);
-              if (verification.success) {
-                setPaymentStatus('success');
-                setPaymentMessage(`Payment of ₹${verification.amount_inr} completed! 🎉`);
-                
-                // Cashback Reward (₹1-₹5)
-                const reward = Math.floor(Math.random() * 5) + 1;
-                setTimeout(() => {
-                  setPaymentMessage(prev => prev + ` \nPlus ₹${reward} Voice Cashback earned! 🎊`);
-                  loadUser(); // Refresh balance
-                }, 1500);
-
-                setRefreshKey((k) => k + 1);
-              } else {
-                setPaymentStatus('failed');
-                setPaymentMessage(verification.message);
-              }
-            } catch (e) {
-              setPaymentStatus('failed');
-              setPaymentMessage(`Verification error: ${e.message}`);
-            }
-          },
-          (errorMsg) => {
-            setPaymentStatus('failed');
-            setPaymentMessage(errorMsg || 'Payment cancelled');
+        const finalResult = await processVoiceCommandSSE(
+          audioBlob,
+          user.username,
+          (stageEvent) => {
+            setPipelineStages((prev) => [
+              ...prev,
+              {
+                stage: stageEvent.stage,
+                success: stageEvent.success,
+                data: stageEvent.data,
+                duration_ms: stageEvent.duration_ms,
+              },
+            ]);
           }
         );
-      } catch (e) {
-        setStatusMessage(`Razorpay error: ${e.message}`);
-        setPaymentStatus('failed');
-        setPaymentMessage(e.message);
+
+        if (!finalResult) {
+          showMsg('No response from server', 'error');
+          return;
+        }
+
+        if (finalResult.data?.status === 'clarify') {
+          VoiceLines.notUnderstood();
+          setRetryCount((prev) => prev + 1);
+          if (retryCount + 1 >= MAX_RETRIES) {
+          VoiceLines.maxRetriesReached();
+            showMsg('Unable to understand after 3 attempts. Please type your command instead.', 'error');
+          } else {
+            showMsg(finalResult.data.message || 'Please try again', 'info');
+            setTimeout(() => {
+              resetAudio();
+              startRecording().catch(() => {});
+            }, 1500);
+          }
+          return;
+        }
+
+        // Handle non-payment intents (info responses)
+        if (finalResult.data?.status === 'info_response') {
+          handleInfoResponse(finalResult.data);
+          return;
+        }
+
+        // Handle unknown recipient
+        if (finalResult.data?.status === 'unknown_recipient') {
+          VoiceLines.unknownRecipient(finalResult.data.recipient || 'This person');
+          showMsg(finalResult.data.message || 'Contact not found. Scan QR instead?', 'warning');
+          setShowQRScanner(true);
+          return;
+        }
+
+        setRetryCount(0);
+
+        const txnId = finalResult.data?.transaction_id;
+        const authDec = finalResult.data?.auth_decision;
+
+        if (txnId) setCurrentTransaction({ id: txnId });
+        if (authDec) {
+          setAuthDecision(authDec);
+          handleAuthDecision(authDec);
+        }
+      } catch (err) {
+        console.warn('[App] SSE failed, falling back to batch:', err.message);
+        try {
+          const result = await processVoiceCommand(audioBlob, user.username);
+          handleBatchResult(result);
+        } catch (batchErr) {
+          showMsg(`Error: ${batchErr.message}`, 'error');
+          VoiceLines.networkError();
+        }
+      } finally {
+        setPipelineLoading(false);
+        resetAudio();
       }
-    } catch (e) {
-      setPinLoading(false);
-      throw e; // Let PinPad handle the error
+    };
+
+    processAudio();
+  }, [audioBlob]);
+
+  // --- Text Command Processing ---
+  const handleTextSubmit = async (e) => {
+    e.preventDefault();
+    if (!textInput.trim()) return;
+
+    setPipelineLoading(true);
+    setPipelineStages([]);
+    setMessage('');
+    setAuthDecision(null);
+    setCurrentTransaction(null);
+    setRetryCount(0);
+
+    try {
+      const result = await processTextCommand(textInput, user.username);
+      handleBatchResult(result);
+    } catch (err) {
+      showMsg(`Error: ${err.message}`, 'error');
+    } finally {
+      setPipelineLoading(false);
+      setTextInput('');
     }
-    setPinLoading(false);
   };
 
-  // --- Get transaction amount & recipient from pipeline result ---
-  const getAmount = () => {
-    const intentStage = pipelineResult?.stages?.find((s) => s.stage === 'intent_classification');
-    return intentStage?.data?.entities?.amount || 0;
+  // Quick-fill a sample command
+  const handleSampleClick = (text) => {
+    setTextInput(text);
   };
 
-  const getRecipient = () => {
-    const intentStage = pipelineResult?.stages?.find((s) => s.stage === 'intent_classification');
-    return intentStage?.data?.entities?.recipient || '';
+  // --- Handle non-payment intent responses ---
+  const handleInfoResponse = (data) => {
+    // Clear pipeline loading since this is a terminal response
+    setPipelineLoading(false);
+    // Keep stages visible briefly, then clear after message shows
+    setTimeout(() => setPipelineStages([]), 300);
+
+    const intent = data.intent;
+    if (intent === 'check_balance') {
+      getBalance(user.username).then((b) => {
+        setBalance(b.balance);
+        VoiceLines.balanceResult(b.balance);
+        setShowBalancePopup(true);
+        // Auto-close after 6 seconds
+        setTimeout(() => setShowBalancePopup(false), 6000);
+      }).catch(() => { VoiceLines.networkError(); showMsg('Could not fetch balance', 'error'); });
+    } else if (intent === 'transaction_history') {
+      VoiceLines.showingHistory();
+      showMsg('📋 Switching to transaction history...', 'info');
+      setTimeout(() => setView('history'), 500);
+    } else if (intent === 'scan_qr') {
+      VoiceLines.qrScannerOpened();
+      showMsg('📷 Opening QR scanner...', 'info');
+      setShowQRScanner(true);
+    }
   };
+
+  // --- Handle batch pipeline result ---
+  const handleBatchResult = (result) => {
+    if (result.stages) {
+      setPipelineStages(result.stages);
+    }
+
+    if (result.status === 'clarify') {
+      VoiceLines.notUnderstood();
+      showMsg(result.message || 'Please try again', 'info');
+      return;
+    }
+
+    // Handle non-payment intents
+    if (result.status === 'info_response') {
+      handleInfoResponse(result);
+      return;
+    }
+
+    // Handle unknown recipient — prompt QR scan
+    if (result.status === 'unknown_recipient') {
+      VoiceLines.unknownRecipient(result.recipient || 'This person');
+      showMsg(result.message || 'Contact not found. Scan QR instead?', 'warning');
+      setShowQRScanner(true);
+      return;
+    }
+
+    if (result.transaction_id) {
+      setCurrentTransaction({ id: result.transaction_id });
+    }
+
+    // Check for unknown contact — prompt QR
+    const intentStage = result.stages?.find((s) => s.stage === 'intent_classification');
+    if (intentStage?.data?.prompt_qr) {
+      const recipientName = intentStage.data.entities?.recipient || 'This person';
+      VoiceLines.unknownRecipient(recipientName);
+      showMsg(
+        `Contact "${recipientName}" not found. Would you like to scan a QR code instead?`,
+        'warning'
+      );
+    }
+
+    if (result.auth_decision) {
+      setAuthDecision(result.auth_decision);
+      handleAuthDecision(result.auth_decision);
+    }
+  };
+
+  // --- Auth Decision Handler ---
+  const handleAuthDecision = (decision) => {
+    if (!decision.proceed) {
+      VoiceLines.paymentBlocked();
+      showMsg(decision.message || 'Transaction blocked', 'error');
+      return;
+    }
+
+    const method = decision.auth_required;
+    if (method === 'pin_only') {
+      // Try to get amount/recipient from pipeline stages for spoken feedback
+      const intentStage = pipelineStages.find((s) => s.stage === 'intent_classification');
+      const amount = intentStage?.data?.entities?.amount || 0;
+      const recipient = intentStage?.data?.entities?.recipient || 'recipient';
+      VoiceLines.paymentPinOnly(amount, recipient);
+      setShowPinPad(true);
+    } else if (method === 'step_up') {
+      const intentStage = pipelineStages.find((s) => s.stage === 'intent_classification');
+      const amount = intentStage?.data?.entities?.amount || 0;
+      const recipient = intentStage?.data?.entities?.recipient || 'recipient';
+      VoiceLines.paymentStepUp(amount, recipient);
+      setShowStepUp(true);
+    }
+  };
+
+  // --- PIN Verification ---
+  const handlePinSubmit = async (pin) => {
+    try {
+      const result = await verifyPin(user.username, pin, currentTransaction.id);
+      if (result.success) {
+        setShowPinPad(false);
+        VoiceLines.pinSuccess();
+        showMsg('PIN verified! Confirm your payment.', 'success');
+
+        const lastIntent = pipelineStages.find((s) => s.stage === 'intent_classification');
+        const lastFraud = pipelineStages.find((s) => s.stage === 'fraud_detection');
+        setCurrentTransaction((prev) => ({
+          ...prev,
+          amount: lastIntent?.data?.entities?.amount || 0,
+          recipient: lastIntent?.data?.entities?.recipient || 'Unknown',
+          riskTier: lastFraud?.data?.risk_tier || 'Low',
+          riskScore: lastFraud?.data?.risk_score || 0,
+        }));
+        setShowConfirmation(true);
+      } else {
+        showMsg(result.message || 'Invalid PIN', 'error');
+        VoiceLines.pinFailed();
+      }
+    } catch (err) {
+      showMsg(`PIN error: ${err.message}`, 'error');
+    }
+  };
+
+  // --- Step-Up Auth Complete ---
+  const handleStepUpComplete = () => {
+    setShowStepUp(false);
+    setShowPinPad(true);
+    VoiceLines.stepUpSuccess();
+    showMsg('Voice re-verified! Enter your PIN.', 'success');
+  };
+
+  // --- Confirmation Modal Handlers ---
+  const handleConfirmPayment = async () => {
+    setShowConfirmation(false);
+    try {
+      const orderData = await createOrder(currentTransaction.id, user.username);
+      VoiceLines.paymentProcessing();
+      showMsg('Opening payment gateway...', 'info');
+
+      openRazorpayCheckout(
+        orderData,
+        async (paymentData) => {
+          try {
+            const result = await verifyPayment(paymentData);
+            if (result.success) {
+              // Redirect to receipt page
+              getBalance(user.username).then((data) => setBalance(data.balance)).catch(() => {});
+              VoiceLines.paymentSuccess(
+                currentTransaction.amount || 0,
+                currentTransaction.recipient || 'Merchant'
+              );
+              setReceiptTxnId(currentTransaction.id);
+              setView('receipt');
+              setPipelineStages([]);
+              setMessage('');
+            } else {
+              showMsg(result.message || 'Payment failed', 'error');
+            }
+          } catch (err) {
+            showMsg(`Verification error: ${err.message}`, 'error');
+          }
+        },
+        (error) => {
+          VoiceLines.paymentCancelled();
+          showMsg(`Payment cancelled: ${error}`, 'error');
+        }
+      );
+    } catch (err) {
+      showMsg(`Order error: ${err.message}`, 'error');
+    }
+  };
+
+  const handleCancelPayment = () => {
+    setShowConfirmation(false);
+    setCurrentTransaction(null);
+    VoiceLines.paymentCancelled();
+    showMsg('Payment cancelled.', 'info');
+  };
+
+  // --- Render ---
+  if (!isAuthenticated) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
 
   return (
-    <div className="app-layout">
-      {/* Header Profile Bar */}
+    <div className="app">
+      {/* Header */}
       <header className="app-header">
-        <div className="app-logo">
-          <span className="app-logo-icon">🎙️</span> VoicePay
+        <div className="header-left" onClick={() => { setView('main'); setMessage(''); }} style={{ cursor: 'pointer' }} title="Go to Home">
+          <span className="app-logo">🎙️</span>
+          <h1 className="app-title">VoicePay</h1>
         </div>
-
-        <nav className="app-nav">
-          <button
-            className={`app-nav-btn ${page === 'home' ? 'active' : ''}`}
-            onClick={() => setPage('home')}
-          >
-            🏠 Home
-          </button>
-          <button
-            className={`app-nav-btn ${page === 'history' ? 'active' : ''}`}
-            onClick={() => setPage('history')}
-          >
-            📋 History
-          </button>
-        </nav>
-
-        {user && (
-          <div className="user-bar">
-            <div>
-              <div className="user-name">{user.display_name}</div>
-              <div className="user-balance">₹{balance.toLocaleString('en-IN')}</div>
-            </div>
-            <div className="user-avatar" onClick={() => setShowEnrollment(true)} style={{ cursor: 'pointer', background: user.speaker_enrolled ? 'var(--primary)' : 'var(--warning)' }} title={user.speaker_enrolled ? 'Voice Profile Active' : 'Click to Enroll Voice'}>
-              {user.display_name?.charAt(0).toUpperCase()}
-            </div>
+        <div className="header-center">
+          <nav className="nav-tabs">
+            <button
+              className={`nav-tab ${view === 'main' ? 'active' : ''}`}
+              onClick={() => setView('main')}
+            >
+              💳 Pay
+            </button>
+            <button
+              className={`nav-tab ${view === 'history' ? 'active' : ''}`}
+              onClick={() => setView('history')}
+            >
+              📋 History
+            </button>
+            <button
+              className={`nav-tab ${view === 'contacts' ? 'active' : ''}`}
+              onClick={() => setView('contacts')}
+            >
+              👥 Contacts
+            </button>
+            <button
+              className={`nav-tab ${view === 'enroll' ? 'active' : ''}`}
+              onClick={() => setView('enroll')}
+            >
+              🔐 Voice ID
+            </button>
+          </nav>
+        </div>
+        <div className="header-right">
+          <div className="user-badge">
+            <span className="user-avatar">{user?.display_name?.[0]?.toUpperCase() || 'U'}</span>
+            <span className="user-name">{user?.display_name}</span>
           </div>
-        )}
+          <button className="btn btn-ghost btn-sm" onClick={handleLogout} id="logout-btn">
+            Logout
+          </button>
+        </div>
       </header>
+
+      {/* Messages */}
+      {message && (
+        <div className={`message-bar message-${messageType} animate-in`}>
+          <span>{message}</span>
+          <button className="message-close" onClick={() => setMessage('')}>×</button>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="app-main">
-        {page === 'home' && (
-          <>
-            {/* Hero / Voice Section */}
-            <section className="voice-section animate-in">
-              <h1 className="voice-title">
-                Pay with your <span>Voice</span>
-              </h1>
-              <p className="voice-subtitle">
-                Speak a command or type below. Your voice is verified, intent classified,
-                and fraud checked — all in milliseconds.
-              </p>
+        {view === 'main' && (
+          <div className="main-grid">
+            {/* Voice/Text Input */}
+            <section className="card input-section">
+              <h2 className="section-title">Make a Payment</h2>
+              <p className="section-subtitle">Speak or type your command</p>
 
               {/* Mic Button */}
               <div className="mic-container">
                 <button
+                  className={`mic-btn ${isRecording ? 'recording' : ''} ${pipelineLoading ? 'disabled' : ''}`}
+                  onClick={() => {
+                    if (isRecording) {
+                      stopSpeaking();
+                      stopRecording();
+                      VoiceLines.recordingStopped();
+                    } else {
+                      startRecording();
+                    }
+                  }}
+                  disabled={pipelineLoading}
                   id="mic-button"
-                  className={`mic-btn ${isRecording ? 'recording' : ''}`}
-                  onClick={handleMicClick}
-                  disabled={processing}
                 >
-                  {isRecording ? '⏹' : processing ? <div className="spinner" /> : '🎙️'}
+                  <span className="mic-icon">{isRecording ? '⏹️' : '🎙️'}</span>
+                  {isRecording && <div className="mic-pulse" />}
                 </button>
-                <div className="mic-ring" />
-                <div className="mic-ring" />
-                <div className="mic-ring" />
+                <span className="mic-label">
+                  {isRecording
+                    ? 'Listening... (auto-stops on silence)'
+                    : pipelineLoading
+                    ? 'Processing...'
+                    : retryCount > 0 && retryCount < MAX_RETRIES
+                    ? `Retry ${retryCount}/${MAX_RETRIES} — Tap to speak`
+                    : 'Tap to speak'}
+                </span>
               </div>
 
-              <p style={{ color: 'var(--text-muted)', fontSize: 'var(--font-sm)' }}>
-                {isRecording
-                  ? 'Listening... Click to stop'
-                  : processing
-                  ? 'Processing...'
-                  : 'Click to speak a command'}
-              </p>
-
-              {/* Text Input Fallback */}
-              <form className="text-input-section" onSubmit={handleTextSubmit}>
+              {/* Text Fallback */}
+              <form className="text-input-form" onSubmit={handleTextSubmit}>
                 <input
-                  id="text-command-input"
-                  className="text-input"
                   type="text"
-                  placeholder='Or type: "send 5 rupees to rahul"'
+                  placeholder='e.g. "Send 500 rupees to Rahul"'
                   value={textInput}
                   onChange={(e) => setTextInput(e.target.value)}
-                  disabled={processing}
+                  disabled={pipelineLoading}
+                  id="text-command-input"
                 />
-                <button className="btn btn-primary" type="submit" disabled={processing || !textInput.trim()}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={pipelineLoading || !textInput.trim()}
+                  id="send-text-btn"
+                >
                   Send
                 </button>
               </form>
-            </section>
 
-            {/* Pipeline Results */}
-            {stages.length > 0 && (
-              <section className="animate-in" style={{ marginBottom: 'var(--space-xl)' }}>
-                <h2 style={{ fontSize: 'var(--font-xl)', fontWeight: 700, marginBottom: 'var(--space-lg)', textAlign: 'center' }}>
-                  Pipeline Results
-                </h2>
-                <PipelineVisualizer stages={stages} loading={processing} />
-                {!processing && pipelineResult?.auth_decision && (
-                  <ThreatMatrix authDecision={pipelineResult.auth_decision} />
-                )}
-              </section>
-            )}
-
-            {/* Auth Result / Status */}
-            {statusMessage && !showPin && !showStepUp && !showBalance && !paymentStatus && (
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-xl)' }}>
-                <div
-                  className={`auth-panel ${
-                    pipelineResult?.auth_decision?.proceed
-                      ? pipelineResult?.auth_decision?.auth_required === 'step_up'
-                        ? 'stepup'
-                        : 'proceed'
-                      : 'blocked'
-                  }`}
-                >
-                  <div className="auth-icon">
-                    {pipelineResult?.auth_decision?.proceed ? (
-                      pipelineResult?.auth_decision?.auth_required === 'step_up' ? '⚠️' : '✅'
-                    ) : (
-                      '🚫'
-                    )}
-                  </div>
-                  <div className="auth-message">{statusMessage}</div>
-                  <button className="btn btn-secondary" onClick={resetPipeline}>
-                    New Command
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Payment Status */}
-            {paymentStatus && (
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-xl)' }}>
-                <div className={`auth-panel ${paymentStatus === 'success' ? 'proceed' : 'blocked'}`}>
-                  <div className="auth-icon">{paymentStatus === 'success' ? '🎉' : '❌'}</div>
-                  <div className="auth-title">
-                    {paymentStatus === 'success' ? 'Payment Successful!' : 'Payment Failed'}
-                  </div>
-                  <div className="auth-message">{paymentMessage}</div>
-                  <button className="btn btn-primary" onClick={resetPipeline}>
-                    New Command
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Dashboard Stats */}
-            {!stages.length && (
-              <div className="dashboard-grid animate-in animate-in-delay-1">
-                <div className="stat-card">
-                  <div className="stat-label">Available Balance</div>
-                  <div className="stat-value gradient">₹{balance.toLocaleString('en-IN')}</div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-label">Account Status</div>
-                  <div className="stat-value" style={{ color: 'var(--success)' }}>Active</div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-label">Voice Enrolled</div>
-                  <div className="stat-value" style={{ color: user?.speaker_enrolled ? 'var(--success)' : 'var(--warning)' }}>
-                    {user?.speaker_enrolled ? 'Yes' : 'No'}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Quick Commands */}
-            {!stages.length && (
-              <div className="card animate-in animate-in-delay-2">
-                <div className="card-header">
-                  <div className="card-title">Try These Commands</div>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-                  {[
-                    { text: 'send 5 rupees to rahul', icon: '💸' },
-                    { text: 'check my balance', icon: '💰' },
-                    { text: 'show recent transactions', icon: '📋' },
-                    { text: 'pay electricity bill of 10 rupees', icon: '🧾' },
-                  ].map((cmd) => (
+              {/* Try These Commands */}
+              <div className="sample-commands">
+                <p className="sample-label">Try these commands:</p>
+                <div className="sample-chips">
+                  {SAMPLE_COMMANDS.map((cmd) => (
                     <button
                       key={cmd.text}
-                      className="txn-item"
-                      style={{ justifyContent: 'flex-start', cursor: 'pointer' }}
-                      onClick={() => {
-                        setTextInput(cmd.text);
-                        // Auto submit
-                        resetPipeline();
-                        setProcessing(true);
-                        processTextCommand(cmd.text, USER_ID).then((r) => {
-                          handlePipelineResult(r);
-                          setProcessing(false);
-                        }).catch((e) => {
-                          setStatusMessage(`Error: ${e.message}`);
-                          setProcessing(false);
-                        });
-                      }}
+                      className="sample-chip"
+                      onClick={() => handleSampleClick(cmd.text)}
+                      disabled={pipelineLoading}
                     >
-                      <span style={{ fontSize: '1.5rem' }}>{cmd.icon}</span>
-                      <span style={{ fontSize: '1rem', color: 'var(--text-main)', fontWeight: '500' }}>
-                        "{cmd.text}"
-                      </span>
+                      <span>{cmd.icon}</span> {cmd.text}
                     </button>
                   ))}
                 </div>
               </div>
+            </section>
+
+            {/* Pipeline Visualization */}
+            <section className="card pipeline-section">
+              <h2 className="section-title">Pipeline Status</h2>
+              <PipelineVisualizer stages={pipelineStages} loading={pipelineLoading} />
+            </section>
+
+            {/* Threat Matrix */}
+            {pipelineStages.some((s) => s.stage === 'fraud_detection') && (
+              <section className="card threat-section">
+                <h2 className="section-title">Threat Analysis</h2>
+                <ThreatMatrix
+                  fraudData={pipelineStages.find((s) => s.stage === 'fraud_detection')?.data}
+                  svData={pipelineStages.find((s) => s.stage === 'speaker_verification')?.data}
+                />
+              </section>
             )}
-          </>
+          </div>
         )}
 
-        {page === 'history' && (
-          <div className="animate-in">
-            <TransactionHistory username={USER_ID} refreshKey={refreshKey} />
-          </div>
+        {view === 'history' && (
+          <TransactionHistory username={user?.username} />
+        )}
+
+        {view === 'contacts' && (
+          <ContactsList />
+        )}
+
+        {view === 'receipt' && receiptTxnId && (
+          <TransactionReceipt
+            transactionId={receiptTxnId}
+            onGoHome={() => {
+              setView('main');
+              setCurrentTransaction(null);
+              setReceiptTxnId(null);
+              setPipelineStages([]);
+            }}
+          />
+        )}
+
+        {view === 'enroll' && (
+          <VoiceEnrollment
+            userId={user?.username}
+            isEnrolled={user?.speaker_enrolled}
+            onComplete={() => {
+              setUser((prev) => ({ ...prev, speaker_enrolled: true }));
+              localStorage.setItem('voicepay_user', JSON.stringify({ ...user, speaker_enrolled: true }));
+              showMsg('Voice profile enrolled successfully!', 'success');
+              setView('main');
+            }}
+            onCancel={() => setView('main')}
+          />
         )}
       </main>
 
-      {/* PIN Pad Modal */}
-      {showPin && (
+      {/* Modals */}
+      {showPinPad && (
         <PinPad
-          amount={getAmount()}
-          recipient={getRecipient()}
           onSubmit={handlePinSubmit}
-          onCancel={() => {
-            setShowPin(false);
-            setStatusMessage('Payment cancelled.');
-          }}
-          loading={pinLoading}
+          onCancel={() => setShowPinPad(false)}
         />
       )}
 
-      {/* StepUp Auth Modal */}
       {showStepUp && (
         <StepUpAuth
-          userId={USER_ID}
-          onSuccess={() => {
-            setShowStepUp(false);
-            setShowPin(true); // Proceed to PIN after successful voice step-up
-          }}
+          userId={user?.username}
+          onSuccess={handleStepUpComplete}
           onCancel={() => {
             setShowStepUp(false);
-            setStatusMessage('Voice step-up auth cancelled.');
+            showMsg('Step-up verification cancelled.', 'info');
           }}
         />
       )}
 
-      {/* Voice Enrollment Modal */}
-      {showEnrollment && (
-        <VoiceEnrollment
-          userId={USER_ID}
-          onComplete={() => {
-            setShowEnrollment(false);
-            loadUser(); // Refresh user state to show enrolled status
-            setStatusMessage('Voice profile successfully created!');
-          }}
-          onCancel={() => setShowEnrollment(false)}
+      {showConfirmation && currentTransaction && (
+        <ConfirmationModal
+          transactionId={currentTransaction.id}
+          amount={currentTransaction.amount}
+          recipient={currentTransaction.recipient}
+          riskTier={currentTransaction.riskTier}
+          riskScore={currentTransaction.riskScore}
+          onConfirm={handleConfirmPayment}
+          onCancel={handleCancelPayment}
         />
       )}
 
-      {/* Balance Display Modal */}
-      {showBalance && (
-        <BalanceDisplay
-          balance={balance}
-          onDismiss={() => {
-            setShowBalance(false);
-            resetPipeline();
+      {showQRScanner && (
+        <QRScannerModal
+          onClose={() => setShowQRScanner(false)}
+          onScan={(upiId) => {
+            setShowQRScanner(false);
+            // Trigger a real payment flow via the text command pipeline
+            const qrCommand = `Send payment to ${upiId}`;
+            setTextInput(qrCommand);
+            showMsg(`QR scanned: ${upiId}. Type amount and send, or submit now.`, 'success');
           }}
         />
+      )}
+
+      {/* Balance Popup */}
+      {showBalancePopup && (
+        <div className="balance-popup-overlay" onClick={() => setShowBalancePopup(false)}>
+          <div className="balance-popup animate-in" onClick={(e) => e.stopPropagation()}>
+            <button className="balance-popup-close" onClick={() => setShowBalancePopup(false)}>×</button>
+            <div className="balance-popup-icon">💰</div>
+            <h3 className="balance-popup-title">Account Balance</h3>
+            <div className="balance-popup-amount">
+              ₹{balance !== null ? balance.toLocaleString('en-IN') : '...'}
+            </div>
+            <div className="balance-popup-details">
+              <div className="balance-popup-row">
+                <span>Account Holder</span>
+                <span>{user?.display_name || user?.username}</span>
+              </div>
+              <div className="balance-popup-row">
+                <span>Username</span>
+                <span>@{user?.username}</span>
+              </div>
+              <div className="balance-popup-row">
+                <span>Voice ID</span>
+                <span>{user?.speaker_enrolled ? '✅ Enrolled' : '⚠️ Not enrolled'}</span>
+              </div>
+              <div className="balance-popup-row">
+                <span>Account Type</span>
+                <span>Savings</span>
+              </div>
+            </div>
+            <div className="balance-popup-timer">Auto-closes in a few seconds</div>
+          </div>
+        </div>
       )}
     </div>
   );
 }
+
+export default App;

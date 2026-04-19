@@ -10,6 +10,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+# Fix Windows terminal encoding — prevent cp1252 UnicodeEncodeError
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -158,7 +163,8 @@ async def root():
 
 
 # --- Register Routers ---
-from backend.app.api import voice, payments, users, transactions
+from backend.app.api import auth, voice, payments, users, transactions
+app.include_router(auth.router, prefix="/api/v1")
 app.include_router(voice.router, prefix="/api/v1")
 app.include_router(payments.router, prefix="/api/v1")
 app.include_router(users.router, prefix="/api/v1")

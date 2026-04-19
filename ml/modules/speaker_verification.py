@@ -18,54 +18,9 @@ import torch
 import torchaudio
 from typing import Dict, Any, List, Optional
 
-# --- Monkeypatch HuggingFace Hub for SpeechBrain 1.0.0 Compatibility ---
-import huggingface_hub
-_original_hf_hub_download = huggingface_hub.hf_hub_download
-def _patched_hf_hub_download(*args, **kwargs):
-    if "use_auth_token" in kwargs:
-        kwargs["token"] = kwargs.pop("use_auth_token")
-    return _original_hf_hub_download(*args, **kwargs)
-huggingface_hub.hf_hub_download = _patched_hf_hub_download
-
-# --- Monkeypatch pathlib.Path.symlink_to for Windows Admin Privilege Bypass ---
-import pathlib
-import os
-import shutil
-_original_symlink_to = pathlib.Path.symlink_to
-
-def _patched_symlink_to(self, target, target_is_directory=False):
-    try:
-        _original_symlink_to(self, target, target_is_directory)
-    except OSError as e:
-        if getattr(e, 'winerror', None) == 1314:
-            # Fallback to hard copy if lacking privileges
-            if target_is_directory or os.path.isdir(target):
-                shutil.copytree(target, self)
-            else:
-                shutil.copy2(target, self)
-        else:
-            raise
-pathlib.Path.symlink_to = _patched_symlink_to
-
-# --- Monkeypatch speechbrain.utils.fetching.fetch for Missing custom.py ---
-import speechbrain.utils.fetching
-_original_fetch = speechbrain.utils.fetching.fetch
-
-def _patched_fetch(filename, source, savedir="./pretrained_model_checkpoints", *args, **kwargs):
-    try:
-        return _original_fetch(filename, source, savedir=savedir, *args, **kwargs)
-    except Exception as e:
-        # If it's a 404 for custom.py, just create a dummy custom.py
-        if "custom.py" in filename and ("404" in str(e) or "Entry Not Found" in str(e)):
-            print(f"[SV] Ignored missing {filename} from {source}.")
-            dummy_path = os.path.join(savedir, filename)
-            os.makedirs(savedir, exist_ok=True)
-            with open(dummy_path, "w") as f:
-                f.write("# dummy custom.py\n")
-            return pathlib.Path(dummy_path)
-        raise
-
-speechbrain.utils.fetching.fetch = _patched_fetch
+# Apply all compatibility patches (HF Hub, symlink, SpeechBrain fetch, ffmpeg)
+from ml.modules.compat import apply_all_patches
+apply_all_patches()
 
 from speechbrain.inference.speaker import EncoderClassifier
 
@@ -90,6 +45,9 @@ class SpeakerVerification:
         self.embedding_dim = sv_config["embedding_dim"]
         self.device = sv_config["device"]
         self.profiles_dir = sv_config["profiles_dir"]
+
+        # Load liveness threshold from config (calibrated) or use default
+        self.liveness_hfe_threshold = sv_config.get("liveness_hfe_threshold", 0.015)
 
         self.model = None
 
@@ -122,10 +80,8 @@ class SpeakerVerification:
         if not os.path.exists(audio_path):
             raise FileNotFoundError(f"[SV] Audio file not found: {audio_path}")
 
-        # Use Whisper's load_audio (which is monkey-patched to use ffmpeg)
+        # Use Whisper's load_audio (patched via compat to use bundled ffmpeg)
         # because torchaudio.load fails on WebM audio formats sent from browsers.
-        # We import ml.modules.stt to ensure the ffmpeg monkeypatch is applied.
-        import ml.modules.stt 
         import whisper
         try:
             audio_data = whisper.load_audio(audio_path, sr=16000)
@@ -144,20 +100,34 @@ class SpeakerVerification:
 
         return embedding
 
-    def enroll_speaker(self, speaker_id: str, audio_paths: List[str]) -> Dict[str, Any]:
+    def enroll_speaker(
+        self,
+        speaker_id: str,
+        audio_paths: List[str],
+        authenticated_user_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
         """
         Enroll a speaker by averaging embeddings from multiple audio samples.
 
         Args:
             speaker_id: Unique identifier for the speaker.
             audio_paths: List of audio file paths for enrollment.
+            authenticated_user_id: If provided, must match speaker_id (security check).
 
         Returns:
             Enrollment result with speaker_id and number of samples used.
 
         Raises:
             ValueError: If fewer than min_enrollment_samples are provided.
+            PermissionError: If authenticated_user_id doesn't match speaker_id.
         """
+        # Security: prevent cross-user enrollment
+        if authenticated_user_id is not None and authenticated_user_id != speaker_id:
+            raise PermissionError(
+                f"[SV] User '{authenticated_user_id}' cannot enroll speaker profile "
+                f"for '{speaker_id}'"
+            )
+
         if len(audio_paths) < self.min_enrollment_samples:
             raise ValueError(
                 f"[SV] Need at least {self.min_enrollment_samples} audio samples for enrollment, "
@@ -202,17 +172,30 @@ class SpeakerVerification:
             "profile_path": profile_path,
         }
 
-    def verify_speaker(self, speaker_id: str, audio_path: str) -> Dict[str, Any]:
+    def verify_speaker(
+        self,
+        speaker_id: str,
+        audio_path: str,
+        authenticated_user_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
         """
         Verify if the audio matches the enrolled speaker.
 
         Args:
             speaker_id: ID of the enrolled speaker to verify against.
             audio_path: Path to the verification audio.
+            authenticated_user_id: If provided, must match speaker_id (security check).
 
         Returns:
             Verification result with similarity score and verified status.
         """
+        # Security: prevent cross-user verification
+        if authenticated_user_id is not None and authenticated_user_id != speaker_id:
+            raise PermissionError(
+                f"[SV] User '{authenticated_user_id}' cannot verify against "
+                f"speaker profile '{speaker_id}'"
+            )
+
         # Load stored profile
         profile_path = os.path.join(self.profiles_dir, f"{speaker_id}.npy")
         if not os.path.exists(profile_path):
@@ -252,6 +235,9 @@ class SpeakerVerification:
         Anti-spoofing mechanism using High-Frequency Energy (HFE) analysis.
         Replayed audio (via low-quality speakers) heavily suppresses high frequencies.
         Returns a dictionary with liveness score and boolean flag.
+
+        The HFE threshold is loaded from config.yaml (calibrated via
+        ml/scripts/calibrate_liveness.py) instead of being hardcoded.
         """
         try:
             import whisper
@@ -278,10 +264,12 @@ class SpeakerVerification:
             
             hfe_ratio = high_freq_energy / total_energy if total_energy > 0 else 1.0
             
-            # Normal speech has some HF noise. Compressed replay often drops below 0.05
-            is_live = hfe_ratio > 0.015
+            # Use calibrated threshold from config
+            is_live = hfe_ratio > self.liveness_hfe_threshold
             
-            print(f"[SV] Liveness Check: HFE Ratio = {hfe_ratio:.4f} → {'✅ LIVE' if is_live else '❌ SPOOF'}")
+            print(f"[SV] Liveness Check: HFE Ratio = {hfe_ratio:.4f}, "
+                  f"Threshold = {self.liveness_hfe_threshold} "
+                  f"→ {'✅ LIVE' if is_live else '❌ SPOOF'}")
             
             return {
                 "is_live": bool(is_live),

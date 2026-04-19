@@ -8,6 +8,7 @@ export function useAudioRecorder() {
   const chunks = useRef([]);
   const audioContext = useRef(null);
   const animationFrameId = useRef(null);
+  const recordingStartTime = useRef(null);
   
   // Refs to use inside the animation frame loop
   const stopRecordingRef = useRef(null);
@@ -32,6 +33,7 @@ export function useAudioRecorder() {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorder.current = new MediaRecorder(stream, { mimeType: 'audio/webm' });
       chunks.current = [];
+      recordingStartTime.current = Date.now();
 
       // --- Silence Detection Setup ---
       audioContext.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -39,41 +41,69 @@ export function useAudioRecorder() {
       const source = audioContext.current.createMediaStreamSource(stream);
       source.connect(analyser);
       
-      analyser.fftSize = 512;
+      analyser.fftSize = 1024;
       const bufferLength = analyser.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
       
       let lastSoundTime = Date.now();
       let hasStartedSpeaking = false;
+      let speechFrameCount = 0; // Require multiple consecutive loud frames
+
+      const MAX_RECORDING_MS = 12000;    // Hard cap: 12 seconds
+      const SILENCE_AFTER_SPEECH_MS = 2000; // 2s silence after speech
+      const NO_SPEECH_TIMEOUT_MS = 6000;   // 6s if user never speaks
+      const SPEECH_THRESHOLD_AVG = 25;     // Average volume threshold
+      const SPEECH_THRESHOLD_MAX = 90;     // Max frequency threshold
+      const SPEECH_CONFIRM_FRAMES = 3;     // Must see 3 loud frames to confirm speech
 
       const detectSilence = () => {
         if (!isRecordingRef.current) return;
         
         analyser.getByteFrequencyData(dataArray);
         
+        // Compute average and max volume
         let sum = 0;
+        let maxVol = 0;
         for (let i = 0; i < bufferLength; i++) {
           sum += dataArray[i];
+          if (dataArray[i] > maxVol) maxVol = dataArray[i];
         }
-        const averageVolume = sum / bufferLength;
+        const avgVol = sum / bufferLength;
 
         const now = Date.now();
+        const elapsed = now - recordingStartTime.current;
         
-        // Define a threshold indicating speech vs background noise
-        if (averageVolume > 10) { 
-          hasStartedSpeaking = true;
-          lastSoundTime = now;
+        // Hard cap: stop after MAX_RECORDING_MS regardless
+        if (elapsed > MAX_RECORDING_MS) {
+          console.log('[Audio] Max recording time reached, auto-stopping.');
+          stopRecordingRef.current();
+          return;
         }
 
-        // Auto-stop logic:
-        // 1. If they started speaking and paused for 2.5s
-        if (hasStartedSpeaking && (now - lastSoundTime > 2500)) {
+        // Check if current frame is speech
+        const isSpeechFrame = avgVol > SPEECH_THRESHOLD_AVG || maxVol > SPEECH_THRESHOLD_MAX;
+
+        if (isSpeechFrame) {
+          speechFrameCount++;
+          if (speechFrameCount >= SPEECH_CONFIRM_FRAMES) {
+            hasStartedSpeaking = true;
+          }
+          lastSoundTime = now;
+        } else {
+          speechFrameCount = Math.max(0, speechFrameCount - 1); // Decay slowly
+        }
+
+        // Auto-stop conditions:
+        // 1. Started speaking, then quiet for SILENCE_AFTER_SPEECH_MS
+        if (hasStartedSpeaking && (now - lastSoundTime > SILENCE_AFTER_SPEECH_MS)) {
+          console.log('[Audio] Silence detected after speech, auto-stopping.');
           stopRecordingRef.current();
           return;
         }
         
-        // 2. Timeout if they never spoke for 8s
-        if (!hasStartedSpeaking && (now - lastSoundTime > 8000)) {
+        // 2. Never spoke for NO_SPEECH_TIMEOUT_MS
+        if (!hasStartedSpeaking && elapsed > NO_SPEECH_TIMEOUT_MS) {
+          console.log('[Audio] No speech detected, auto-stopping.');
           stopRecordingRef.current();
           return;
         }

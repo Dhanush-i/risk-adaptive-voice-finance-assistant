@@ -24,6 +24,7 @@ from sklearn.metrics import classification_report, confusion_matrix, f1_score
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from ml.modules.intent_classifier import IntentLSTM, IntentClassifier
+from ml.modules.tokenizer import normalize_text
 
 
 class IntentDataset(Dataset):
@@ -39,7 +40,7 @@ class IntentDataset(Dataset):
         return len(self.texts)
 
     def __getitem__(self, idx):
-        text = self.texts[idx].lower().strip()
+        text = normalize_text(self.texts[idx])
         tokens = text.split()
         indices = [self.vocab.get(t, self.vocab.get("<UNK>", 1)) for t in tokens]
 
@@ -56,7 +57,7 @@ def build_vocab(texts: List[str], max_vocab_size: int = 2000) -> Dict[str, int]:
     """Build vocabulary from texts."""
     word_counts = Counter()
     for text in texts:
-        tokens = text.lower().strip().split()
+        tokens = normalize_text(text).split()
         word_counts.update(tokens)
 
     # Reserve special tokens

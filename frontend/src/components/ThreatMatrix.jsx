@@ -1,10 +1,9 @@
 import React from 'react';
 
-export default function ThreatMatrix({ authDecision }) {
-  if (!authDecision || !authDecision.details) return null;
+export default function ThreatMatrix({ fraudData, svData }) {
+  if (!fraudData) return null;
 
-  const { risk_tier, details } = authDecision;
-  const { risk_score, anomaly_flags } = details;
+  const { risk_tier, risk_score, anomaly_flags } = fraudData;
 
   const getRiskColor = (tier) => {
     switch (tier?.toLowerCase()) {
@@ -54,6 +53,19 @@ export default function ThreatMatrix({ authDecision }) {
           }} />
         </div>
       </div>
+
+      {/* Speaker Verification Info */}
+      {svData && (
+        <div style={{ marginBottom: '1.25rem' }}>
+          <h4 style={{ margin: '0 0 0.6rem 0', fontSize: 'var(--font-xs)', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            Speaker Verification
+          </h4>
+          <span className={`badge ${svData.verified ? 'badge-success' : 'badge-danger'}`}>
+            {svData.verified ? '✅ Voice Match' : '❌ No Match'}
+            {svData.similarity_score != null && ` (${(svData.similarity_score * 100).toFixed(0)}%)`}
+          </span>
+        </div>
+      )}
 
       {/* Anomaly Flags */}
       <div>

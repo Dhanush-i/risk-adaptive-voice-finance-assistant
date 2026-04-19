@@ -27,7 +27,9 @@ async def list_transactions(
     if not user:
         raise HTTPException(status_code=404, detail=f"User '{username}' not found")
 
-    query = db.query(Transaction).filter_by(user_id=user.id)
+    query = db.query(Transaction).filter_by(user_id=user.id).filter(
+        Transaction.intent.in_(["send_money", "pay_bill"])
+    )
 
     if status:
         query = query.filter_by(status=status)

@@ -13,6 +13,11 @@ import signal
 import time
 import threading
 
+# Fix Windows terminal encoding — prevent cp1252 UnicodeEncodeError
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(PROJECT_ROOT)
 
@@ -21,10 +26,12 @@ processes = []
 
 def start_backend():
     """Start the FastAPI backend server."""
-    print("[Backend] Starting on http://127.0.0.1:8000 ...")
+    print("[Backend] Starting on http://0.0.0.0:8000 ...")
     proc = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "backend.app.main:app",
-         "--host", "127.0.0.1", "--port", "8000", "--reload"],
+         "--host", "0.0.0.0", "--port", "8000", "--reload",
+         "--reload-dir", "backend",
+         "--reload-dir", "ml"],
         cwd=PROJECT_ROOT,
     )
     processes.append(proc)
@@ -75,8 +82,8 @@ def main():
     print("✅ Application Running!")
     print("=" * 60)
     print(f"\n  🌐 Frontend:  http://localhost:5173")
-    print(f"  📡 Backend:   http://127.0.0.1:8000")
-    print(f"  📚 API Docs:  http://127.0.0.1:8000/docs")
+    print(f"  📡 Backend:   http://0.0.0.0:8000")
+    print(f"  📚 API Docs:  http://0.0.0.0:8000/docs")
     print(f"\n  Press Ctrl+C to stop all services.")
     print("=" * 60 + "\n")
 

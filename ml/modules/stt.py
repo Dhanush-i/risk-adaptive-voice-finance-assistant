@@ -14,42 +14,9 @@ import numpy as np
 import torch
 from typing import Dict, Any, Optional
 
-# --- Monkey-patch Whisper to use bundled FFmpeg from imageio_ffmpeg ---
-# Whisper's load_audio() calls bare "ffmpeg" which fails on Windows if
-# ffmpeg is not on the system PATH.  We replace the command with the
-# absolute path that imageio_ffmpeg ships.
-try:
-    import imageio_ffmpeg as _iff
-    _FFMPEG_EXE = _iff.get_ffmpeg_exe()
-except ImportError:
-    _FFMPEG_EXE = "ffmpeg"  # fallback – hope it's on PATH
-
-import subprocess as _sp
-from whisper.audio import SAMPLE_RATE as _SR
-
-def _patched_load_audio(file: str, sr: int = _SR):
-    """Load audio via the bundled ffmpeg binary."""
-    cmd = [
-        _FFMPEG_EXE,
-        "-nostdin",
-        "-threads", "0",
-        "-i", file,
-        "-f", "s16le",
-        "-ac", "1",
-        "-acodec", "pcm_s16le",
-        "-ar", str(sr),
-        "-",
-    ]
-    try:
-        out = _sp.run(cmd, capture_output=True, check=True).stdout
-    except _sp.CalledProcessError as e:
-        raise RuntimeError(f"Failed to load audio: {e.stderr.decode()}") from e
-
-    return np.frombuffer(out, np.int16).flatten().astype(np.float32) / 32768.0
-
-# Apply the patch
-whisper.audio.load_audio = _patched_load_audio
-whisper.load_audio = _patched_load_audio
+# Apply all compatibility patches (ffmpeg path, etc.)
+from ml.modules.compat import apply_all_patches
+apply_all_patches()
 
 
 class SpeechToText:

@@ -7,6 +7,12 @@ dist/
 build/
 *.egg
 
+# Node
+**/node_modules/
+**/.expo/
+frontend/dist/
+mobile/dist/
+
 # Virtual environment
 .venv/
 venv/
