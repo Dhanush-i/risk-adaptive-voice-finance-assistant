@@ -1,4 +1,12 @@
-# Risk-Adaptive Voice-Based Financial Assistant
+# Risk-Adaptive Voice Finance Assistant
+
+A full-stack voice-based financial system that enables secure transactions using speech input, real-time intent classification, and adaptive risk-based authentication.
+
+## Key Features
+- Voice-driven financial commands using Whisper STT
+- BiLSTM-based intent classification (99.5% F1-score)
+- Voice biometrics (ECAPA-TDNN) with liveness detection
+- Risk-based authentication using Isolation Forest + Random Forest
 
 <p align="center">
   <img src="docs/figures/fig1_system_architecture.png" alt="Architecture" width="800">
